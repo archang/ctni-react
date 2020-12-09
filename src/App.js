@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import List from './components/List';
-import withListLoading from './components/withListLoading';
+// import { Container } from "semantic-ui-react";
 function App() {
-    useEffect(() => {
-        fetch("/scans").then(response =>
-            response.json().then(data => {
-                console.log(data);
-            })
-        );
-    }, []);
+  useEffect(() => {
+    fetch("/scans").then(response =>
+      response.json().then(data => {
+        console.log(data);
+      })
+    );
+  }, []);
 
-    return <div className="App" />;
+  return <div className="App"/>
 }
+
 export default App;
 //   const ListLoading = withListLoading(List);
 //   const [appState, setAppState] = useState({
