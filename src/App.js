@@ -13,11 +13,13 @@ import matchSorter from 'match-sorter'
 import jsondata from './data.json'
 import jsontestdata from './testdata.json'
 import makeData from './makeData'
+// import { useSticky } from 'react-table-sticky';
 
 const Styles = styled.div`
   padding: 1rem;
 
   table {
+    width: 100%;
     margin-left: 210px;
     margin-top: 25px;
     border-spacing: 0;
@@ -29,19 +31,40 @@ const Styles = styled.div`
           border-bottom: 0;
         }
       }
+      th:first-child {
+        text-align: left;
+        font-weight: normal;
+        position: sticky;
+        left: 0px;
+        z-index: 1;
+        background-color: inherit;
+      }
+    }
+    tbody {
+      display: block;
+    }
+    
+    thead > tr {
+      position: sticky;
+      left: 0;
+      top: 0;
+      z-index: 1;
+      height: auto;
+      display: block;
+      th:first-child {
+        background-color: "e5e3e8";
+        text-align: center;
+      }
     }
 
     th,
     td {
-      margin: 160;
-      font-size: 0.75rem;
-      padding: .5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-
-      :last-child {
-        border-right: 0;
-      }
+      min-width: 16rem;
+      max-width: 16rem;
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid "e5e3e8";
+      border-right: 1px solid "e5e3e8";
     }
 
     td {
@@ -65,7 +88,29 @@ const Styles = styled.div`
   }
   .action {
     margin-left: 210px;
-   }
+  }
+   
+   
+  // &.sticky {
+  //   // overflow: hidden;
+  //  
+  //   opacity: 1.0;
+  //   margin-left: 210px;
+  //   .header,
+  //   .footer {
+  //   position: sticky;
+  //   z-index: 1;
+  //   width: fit-content;
+  // }
+  //
+  // .header {      
+  //   top: 0;
+  //   box-shadow: 0px 3px 3px #ccc;
+  // }
+  
+  .frozen-column {
+    background-color: #e5e3e8;
+  }
 `
 
 // Create an editable cell renderer
@@ -302,6 +347,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
     useExpanded,
     usePagination,
       useRowSelect,
+      // useSticky,
 
           hooks => {
       hooks.visibleColumns.push(columns => {
@@ -354,8 +400,8 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
         ))}
         <br />
       </div>
-      <table {...getTableProps()} class="study-table">
-        <thead>
+      <table {...getTableProps()} className="table sticky">
+        <thead className="header">
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
@@ -537,6 +583,7 @@ const IndeterminateCheckbox = React.forwardRef(
 )
 
 function App() {
+  // <div className="fixed-header">
   const columns = React.useMemo(
     () => [
 
@@ -568,11 +615,12 @@ function App() {
       //     ) : null,
       // },
       {
-        Header: 'Studies',
+      Header: 'Study',
         columns: [
-          {
+            {
             Header: 'IDs',
             accessor: 'Study_ID',
+            // className: "frozen-column"
           },
           {
             Header: 'Desc.',
@@ -775,6 +823,7 @@ function App() {
       />
     </Styles>
   )
+      // </div>
 }
 
 export default App
