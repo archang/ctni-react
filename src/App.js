@@ -37,13 +37,14 @@ const Styles = styled.div`
           border-bottom: 0;
         }
       }
-      // th:first-child {
-      //   font-weight: normal;
-      //   position: sticky;
-      //   left: 0px;
-      //   z-index: -11;
-      //   background-color: inherit;
-      // }
+      th:first-child {
+        text-align: left;
+        font-weight: normal;
+        position: sticky;
+        left: 0px;
+        z-index: 40;
+        background-color: inherit;
+      }
     }
     tbody {
       display: block;
@@ -55,7 +56,7 @@ const Styles = styled.div`
       left: 0;
       top: 0;
       z-index: 1;
-      height: auto;
+      height: 70px;
       display: block;
       th:first-child {
         background-color: "e5e3e8";
@@ -65,14 +66,19 @@ const Styles = styled.div`
 
     th,
     td {
-      min-width: 12rem;
+      min-width: 11rem;
       text-align: center;
+      font-size: 1rem;
       vertical-align: middle;  
-      max-width: 12rem;
+      max-width: 11rem;
       margin: 0;
       padding: 0.5rem;
       border-bottom: 1px solid "e5e3e8";
       border-right: 1px solid "e5e3e8";
+    }
+    
+    th {
+      font-size: 1.5rem;
     }
 
     td {
@@ -167,6 +173,8 @@ const Styles = styled.div`
   }
   .action {
     margin-left: 280px;
+    z-index: 2;
+    position: fixed;
   }
   
 `
@@ -569,27 +577,27 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
           ))}
         </select>
       </div>
-      <pre>
-        <div className="json-info">
-        <code>
-          {JSON.stringify(
-            {
-              pageIndex,
-              pageSize,
-              pageCount,
-              canNextPage,
-              canPreviousPage,
-              sortBy,
-              groupBy,
-              expanded: expanded,
-              filters,
-              selectedRowIds: selectedRowIds,
-            },
-            null,
-            2
-          )}
-        </code></div>
-      </pre>
+      {/*<pre>*/}
+      {/*  <div className="json-info">*/}
+      {/*  <code>*/}
+      {/*    {JSON.stringify(*/}
+      {/*      {*/}
+      {/*        pageIndex,*/}
+      {/*        pageSize,*/}
+      {/*        pageCount,*/}
+      {/*        canNextPage,*/}
+      {/*        canPreviousPage,*/}
+      {/*        sortBy,*/}
+      {/*        groupBy,*/}
+      {/*        expanded: expanded,*/}
+      {/*        filters,*/}
+      {/*        selectedRowIds: selectedRowIds,*/}
+      {/*      },*/}
+      {/*      null,*/}
+      {/*      2*/}
+      {/*    )}*/}
+      {/*  </code></div>*/}
+      {/*</pre>*/}
     </>
   )
 }
@@ -673,7 +681,7 @@ function App() {
       //     ) : null,
       // },
       {
-      Header: 'Study',
+        Header: 'Studies',
         columns: [
             {
             Header: 'IDs',
@@ -711,7 +719,7 @@ function App() {
         ],
       },
       {
-        Header: 'Scans',
+        Header: ' ',
         columns: [
           {
             Header: 'ID',
