@@ -364,7 +364,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
                     {column.canGroupBy ? (
                       // If the column can be grouped, let's add a toggle
                       <span {...column.getGroupByToggleProps()}>
-                        {column.isGrouped ? '🛑 ' : '👊 '}
+                        {column.isGrouped ? '🛑 ' : '⭕ '}
                       </span>
                     ) : null}
                     <span {...column.getSortByToggleProps()}>
@@ -396,7 +396,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
                         // If it's a grouped cell, add an expander and row count
                         <>
                           <span {...row.getToggleRowExpandedProps()}>
-                            {row.isExpanded ? '👇' : '👉'}
+                            {row.isExpanded ? '📖' : '📕'}
                           </span>{' '}
                           {cell.render('Cell', { editable: false })} (
                           {row.subRows.length})
@@ -540,33 +540,33 @@ function App() {
   const columns = React.useMemo(
     () => [
 
-              {
-        // Build our expander column
-        id: 'expander', // Make sure it has an ID
-
-        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-          <span {...getToggleAllRowsExpandedProps()}>
-            {isAllRowsExpanded ? 'x' : 'y'}
-          </span>
-        ),
-        Cell: ({ row }) =>
-          // Use the row.canExpand and row.getToggleRowExpandedProps prop getter
-          // to build the toggle for expanding a row
-          row.canExpand ? (
-            <span
-              {...row.getToggleRowExpandedProps({
-                style: {
-                  // We can even use the row.depth property
-                  // and paddingLeft to indicate the depth
-                  // of the row
-                  paddingLeft: `${row.depth * 2}rem`,
-                },
-              })}
-            >
-              {row.isExpanded ? '👇' : '👉'}
-            </span>
-          ) : null,
-      },
+      //         {
+      //   // Build our expander column
+      //   id: 'expander', // Make sure it has an ID
+      //
+      //   Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+      //     <span {...getToggleAllRowsExpandedProps()}>
+      //       {isAllRowsExpanded ? 'x' : 'y'}
+      //     </span>
+      //   ),
+      //   Cell: ({ row }) =>
+      //     // Use the row.canExpand and row.getToggleRowExpandedProps prop getter
+      //     // to build the toggle for expanding a row
+      //     row.canExpand ? (
+      //       <span
+      //         {...row.getToggleRowExpandedProps({
+      //           style: {
+      //             // We can even use the row.depth property
+      //             // and paddingLeft to indicate the depth
+      //             // of the row
+      //             paddingLeft: `${row.depth * 2}rem`,
+      //           },
+      //         })}
+      //       >
+      //         {row.isExpanded ? '👇' : '👉'}
+      //       </span>
+      //     ) : null,
+      // },
       {
         Header: 'Studies',
         columns: [
@@ -579,24 +579,28 @@ function App() {
             accessor: 'Study_Description',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            canGroupBy: false,
           },
           {
             Header: 'Name.',
             accessor: 'Study_Name',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            canGroupBy: false,
           },
           {
             Header: 'Rating',
             accessor: 'Study_Rating',
             Filter: SelectColumnFilter,
             filter: 'includes',
+            canGroupBy: false,
           },
           {
             Header: 'Comments',
             accessor: 'Study_Comments',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            canGroupBy: false,
           },
 
         ],
@@ -609,24 +613,28 @@ function App() {
             accessor: 'Scan_ID',
             Filter: SliderColumnFilter,
             filter: 'equals',
+            canGroupBy: false,
           },
           {
             Header: 'Name',
             accessor: 'Scan_Name',
             Filter: SelectColumnFilter,
             filter: 'includes',
+            canGroupBy: false,
           },
             {
             Header: 'Time',
             accessor: 'Scan_Time',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            canGroupBy: false,
           },
             {
             Header: 'FOV',
             accessor: 'FOV',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            canGroupBy: false,
           },
             {
             Header: 'Echotime',
@@ -636,6 +644,7 @@ function App() {
             // Aggregate the sum of all visits
             aggregate: 'average',
             Aggregated: ({ value }) => `${value} (avg)`,
+            canGroupBy: false,
           },
             {
             Header: 'Rep. Time',
@@ -645,6 +654,7 @@ function App() {
             // Aggregate the sum of all visits
             aggregate: 'average',
             Aggregated: ({ value }) => `${value} (avg)`,
+            canGroupBy: false,
           },
             {
             Header: '# Rep.',
@@ -654,12 +664,14 @@ function App() {
             // Aggregate the sum of all visits
             aggregate: 'average',
             Aggregated: ({ value }) => `${value} (avg)`,
+            canGroupBy: false,
           },
             {
             Header: 'Spat. Res.',
             accessor: 'SpatResol',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            canGroupBy: false,
           },
             {
             Header: 'Thickness',
@@ -669,6 +681,7 @@ function App() {
             // Aggregate the sum of all visits
             aggregate: 'average',
             Aggregated: ({ value }) => `${value} (avg)`,
+            canGroupBy: false,
           },
             {
             Header: '# Slice',
@@ -678,6 +691,7 @@ function App() {
             // Aggregate the sum of all visits
             aggregate: 'average',
             Aggregated: ({ value }) => `${value} (avg)`,
+            canGroupBy: false,
           },
             {
             Header: 'Slice Gap',
@@ -687,6 +701,7 @@ function App() {
             // Aggregate the sum of all visits
             aggregate: 'average',
             Aggregated: ({ value }) => `${value} (avg)`,
+            canGroupBy: false,
           },
             {
             Header: 'Slice Dist.',
@@ -696,12 +711,14 @@ function App() {
             // Aggregate the sum of all visits
             aggregate: 'average',
             Aggregated: ({ value }) => `${value} (avg)`,
+            canGroupBy: false,
           },
           {
             Header: 'Orientation',
             accessor: 'SliceOrient',
             Filter: SelectColumnFilter,
             filter: 'includes',
+            canGroupBy: false,
           }
         ],
       },
@@ -748,7 +765,7 @@ function App() {
   const [selectedRows, setSelectedRows] = React.useState({});
   return (
     <Styles>
-      <button className="action" onClick={()=>alert(JSON.stringify(selectedRows, null ,2))}>Send selection</button>
+      <button className="action" onClick={()=>alert(JSON.stringify(selectedRows, null ,2))}>Download selected</button>
 
       <Table
         columns={columns}

@@ -161,7 +161,7 @@
   },
   {
     "Study_ID": 5,
-    "Study_Description": "",
+    "Study_Description": "chain of three grocery stores has purchased four crates of fresh strawberries. The\nestimated probability distribution of potential sales of the strawberries before spoilage differs\namong the three stores",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -181,7 +181,7 @@
   },
   {
     "Study_ID": 5,
-    "Study_Description": "",
+    "Study_Description": "Therefore, the owner wants to know how to allocate four crates to the\nthree stores to maximize",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -201,7 +201,7 @@
   },
   {
     "Study_ID": 5,
-    "Study_Description": "",
+    "Study_Description": "xpected profit. For administrative reasons, the owner does not wish to\nsplit crates between stores. H",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -221,7 +221,7 @@
   },
   {
     "Study_ID": 5,
-    "Study_Description": "",
+    "Study_Description": "However, he is willing to distribute no crates to any of his stores. The\ntable below gives the estimated expected profit at each store when it is allocated various numbers\nof crates. Use dynamic programming to determine how many of the four crates should be\nassigned t",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -241,7 +241,7 @@
   },
   {
     "Study_ID": 5,
-    "Study_Description": "",
+    "Study_Description": " Formulate the problem by defining stages, decision variables, states, state\ntransformation and recursive relationship",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -261,7 +261,7 @@
   },
   {
     "Study_ID": 6,
-    "Study_Description": "",
+    "Study_Description": "to any of his stores. The table below gives the estimated expected profit at each store when it is allocated various numbers of crates. Use dynam",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -281,7 +281,7 @@
   },
   {
     "Study_ID": 6,
-    "Study_Description": "",
+    "Study_Description": "data. So we can keep track of that flag with a ref.\n  // const skipResetRef = Reac",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -301,7 +301,7 @@
   },
   {
     "Study_ID": 7,
-    "Study_Description": "",
+    "Study_Description": "One issue with this solution is that it's not valid HTML to nest anchor elements within one another. ",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -321,7 +321,7 @@
   },
   {
     "Study_ID": 7,
-    "Study_Description": "",
+    "Study_Description": "That means that it would not be possible to add another <a> element inside the table row. ",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -341,7 +341,7 @@
   },
   {
     "Study_ID": 7,
-    "Study_Description": "",
+    "Study_Description": " browser. Here's what happens in the table when tryin",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -361,7 +361,7 @@
   },
   {
     "Study_ID": 8,
-    "Study_Description": "",
+    "Study_Description": "Heart Start produces automated external defibrillators (AEDs) in each of two different plants (A\nand B).",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
@@ -381,7 +381,7 @@
   },
   {
     "Study_ID": 8,
-    "Study_Description": "",
+    "Study_Description": "Learn what React is all about on our homepage or in the tutori",
     "Study_Name": 1,
     "Study_Rating": "NULL",
     "Study_Comments": "NULL",
