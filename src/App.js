@@ -26,7 +26,6 @@ const Styles = styled.div`
     border: 1px solid black;
 
     tr {
-      cursor: pointer;
       :nth-child(even) {
         background-color: #F2F2F2;
       }
@@ -38,19 +37,19 @@ const Styles = styled.div`
           border-bottom: 0;
         }
       }
-      th:first-child {
-        font-weight: normal;
-        position: sticky;
-        left: 0px;
-        z-index: -11;
-        background-color: inherit;
-      }
+      // th:first-child {
+      //   font-weight: normal;
+      //   position: sticky;
+      //   left: 0px;
+      //   z-index: -11;
+      //   background-color: inherit;
+      // }
     }
     tbody {
       display: block;
     }
-    
-    
+
+
     thead > tr {
       position: sticky;
       left: 0;
@@ -66,10 +65,10 @@ const Styles = styled.div`
 
     th,
     td {
-      min-width: 10rem;
-      text-align: center
+      min-width: 12rem;
+      text-align: center;
       vertical-align: middle;  
-      max-width: 10rem;
+      max-width: 12rem;
       margin: 0;
       padding: 0.5rem;
       border-bottom: 1px solid "e5e3e8";
@@ -86,6 +85,77 @@ const Styles = styled.div`
       }
     }
   }
+  
+  // table {
+  //   border-spacing: 0;
+  //   margin-left: 280px;
+  //   border: 1px solid black;
+  //
+  //   // tr {
+  //   //   :last-child {
+  //   //     td {
+  //   //       border-bottom: 0;
+  //   //     }
+  //   //   }
+  //   // }
+  //   tr {
+  //     th:first-child {
+  //       font-weight: normal;
+  //       position: sticky;
+  //       left: 0px;
+  //       z-index: -11;
+  //       background-color: inherit;
+  //     }
+  //     :nth-child(even) {
+  //       background-color: #F2F2F2;
+  //     }
+  //     :nth-child(odd) {
+  //       background-color: #FAFBFD;
+  //     }
+  //    
+  //     :last-child {
+  //       td {
+  //         border-bottom: 10;
+  //         margin-left: 280px;
+  //       }
+  //     }
+  //
+  //   thead > tr {
+  //     position: sticky;
+  //     left: 0;
+  //     top: 0;
+  //     z-index: 1;
+  //     height: auto;
+  //     display: block;
+  //     th:first-child {
+  //       font-size:28px;
+  //       // background-color: "e5e3e8";
+  //       background-color: "#FFC0CB";
+  //       text-align: center;
+  //     }
+  //   }
+  //  
+  //   th,
+  //   td {
+  //     margin: 0;
+  //     padding: 0.5rem;
+  //     border-bottom: 1px solid black;
+  //     border-right: 1px solid black;
+  //
+  //     :last-child {
+  //       border-right: 0;
+  //     }
+  //   }
+  //
+  //   td {
+  //     input {
+  //       font-size: 1rem;
+  //       padding: 0;
+  //       margin: 0;
+  //       border: 0;
+  //     }
+  //   }
+  // }
 
   .pagination {
     padding: 0.5rem;
@@ -98,28 +168,7 @@ const Styles = styled.div`
   .action {
     margin-left: 280px;
   }
-   
-   
-  // &.sticky {
-  //   // overflow: hidden;
-  //  
-  //   opacity: 1.0;
-  //   margin-left: 210px;
-  //   .header,
-  //   .footer {
-  //   position: sticky;
-  //   z-index: 1;
-  //   width: fit-content;
-  // }
-  //
-  // .header {      
-  //   top: 0;
-  //   box-shadow: 0px 3px 3px #ccc;
-  // }
   
-  .frozen-column {
-    background-color: #e5e3e8;
-  }
 `
 
 // Create an editable cell renderer
@@ -365,7 +414,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
             id: 'selection',
             // Make this column a groupByBoundary. This ensures that groupBy columns
             // are placed after it
-            groupByBoundary: true,
+            groupByBoundary: false,
             // The header can use the table's getToggleAllRowsSelectedProps method
             // to render a checkbox
             Header: ({ getToggleAllRowsSelectedProps }) => (
@@ -629,7 +678,6 @@ function App() {
             {
             Header: 'IDs',
             accessor: 'Study_ID',
-            // className: "frozen-column"
           },
           {
             Header: 'Desc.',
