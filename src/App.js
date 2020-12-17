@@ -20,29 +20,36 @@ const Styles = styled.div`
 
   table {
     width: 100%;
-    margin-left: 210px;
+    margin-left: 280px;
     margin-top: 25px;
     border-spacing: 0;
     border: 1px solid black;
 
     tr {
+      cursor: pointer;
+      :nth-child(even) {
+        background-color: #F2F2F2;
+      }
+      :nth-child(odd) {
+        background-color: #FAFBFD;
+      }
       :last-child {
         td {
           border-bottom: 0;
         }
       }
       th:first-child {
-        text-align: left;
         font-weight: normal;
         position: sticky;
         left: 0px;
-        z-index: 1;
+        z-index: -11;
         background-color: inherit;
       }
     }
     tbody {
       display: block;
     }
+    
     
     thead > tr {
       position: sticky;
@@ -59,8 +66,10 @@ const Styles = styled.div`
 
     th,
     td {
-      min-width: 16rem;
-      max-width: 16rem;
+      min-width: 10rem;
+      text-align: center
+      vertical-align: middle;  
+      max-width: 10rem;
       margin: 0;
       padding: 0.5rem;
       border-bottom: 1px solid "e5e3e8";
@@ -80,14 +89,14 @@ const Styles = styled.div`
 
   .pagination {
     padding: 0.5rem;
-    margin-left: 210px;
+    margin-left: 280px;
   }
   
   .json-info {
-    margin-left: 210px;
+    margin-left: 280px;
   }
   .action {
-    margin-left: 210px;
+    margin-left: 280px;
   }
    
    
@@ -386,13 +395,13 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
   return (
     <>
         <div class="column-filters">
-        <div>
+        <div class="toggle-all-columns">
           <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
           All
         </div>
         {allColumns.map(column => (
           <div key={column.id}>
-            <label>
+            <label class="individual-columns">
               <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
               {column.id}
             </label>
