@@ -177,6 +177,13 @@ const Styles = styled.div`
     position: fixed;
   }
   
+  .table-body-row:hover {
+    background-color: #ebd834;
+  }
+  .table-body-row-selected {
+    background-color: #fa3928;
+  }
+  
 `
 
 // Create an editable cell renderer
@@ -500,7 +507,11 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
           {page.map(row => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps()}
+                  className="table-body-row"
+                  // onClick={() => console.log(row.original)}
+                  onClick={() => row.toggleRowSelected()}
+                  >
                 {row.cells.map(cell => {
                   return (
                     <td {...cell.getCellProps()}>
