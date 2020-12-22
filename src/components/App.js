@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+
 import styled from 'styled-components'
 import {
   useTable,
@@ -10,18 +11,36 @@ import {
   useExpanded,
 } from 'react-table'
 import matchSorter from 'match-sorter'
-import jsondata from './data.json'
-import jsontestdata from './testdata.json'
-import makeData from './makeData'
+import jsondata from '../data.json'
+import jsontestdata from '../testdata.json'
+import makeData from '../makeData'
+import ctni_logo from '../ctni_logo.jpg';
 // import { useSticky } from 'react-table-sticky';
 
 const Styles = styled.div`
   padding: 1rem;
+  
+  .ctni-logo-class {
+    position: absolute;
+    display: block;
+    left: 50%;
+    margin-top: 10px;
+    transform: translate(-50%, -50%);
+
+  }
+  
+  .table-sticky {
+    margin-top: 80px;
+    height: 85%;
+    width: 90%;
+    position:fixed;
+    overflow:auto;
+  }
 
   table {
     width: 100%;
     margin-left: 280px;
-    margin-top: 25px;
+    // margin-top: 40px;
     border-spacing: 0;
     border: 1px solid black;
 
@@ -92,80 +111,12 @@ const Styles = styled.div`
     }
   }
   
-  // table {
-  //   border-spacing: 0;
-  //   margin-left: 280px;
-  //   border: 1px solid black;
-  //
-  //   // tr {
-  //   //   :last-child {
-  //   //     td {
-  //   //       border-bottom: 0;
-  //   //     }
-  //   //   }
-  //   // }
-  //   tr {
-  //     th:first-child {
-  //       font-weight: normal;
-  //       position: sticky;
-  //       left: 0px;
-  //       z-index: -11;
-  //       background-color: inherit;
-  //     }
-  //     :nth-child(even) {
-  //       background-color: #F2F2F2;
-  //     }
-  //     :nth-child(odd) {
-  //       background-color: #FAFBFD;
-  //     }
-  //    
-  //     :last-child {
-  //       td {
-  //         border-bottom: 10;
-  //         margin-left: 280px;
-  //       }
-  //     }
-  //
-  //   thead > tr {
-  //     position: sticky;
-  //     left: 0;
-  //     top: 0;
-  //     z-index: 1;
-  //     height: auto;
-  //     display: block;
-  //     th:first-child {
-  //       font-size:28px;
-  //       // background-color: "e5e3e8";
-  //       background-color: "#FFC0CB";
-  //       text-align: center;
-  //     }
-  //   }
-  //  
-  //   th,
-  //   td {
-  //     margin: 0;
-  //     padding: 0.5rem;
-  //     border-bottom: 1px solid black;
-  //     border-right: 1px solid black;
-  //
-  //     :last-child {
-  //       border-right: 0;
-  //     }
-  //   }
-  //
-  //   td {
-  //     input {
-  //       font-size: 1rem;
-  //       padding: 0;
-  //       margin: 0;
-  //       border: 0;
-  //     }
-  //   }
-  // }
 
   .pagination {
-    padding: 0.5rem;
-    margin-left: 280px;
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: scale(2) translate(-20%, -50%);
   }
   
   .json-info {
@@ -173,9 +124,31 @@ const Styles = styled.div`
   }
   .action {
     margin-left: 280px;
-    z-index: 2;
+    padding: 10px 15px;
+    bottom: 40px;
+    right: 42px;
+    z-index: 20;
+    color: #ffffff;
     position: fixed;
+    font-size:32px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #32a852;
+    border-radius: 10px;
+    box-shadow: 0 3px #999;
   }
+  
+  .action:hover {
+    background-color: #3e8e41
+  }
+
+  .action:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(3px);
+}
+ 
+  
   
   .table-body-row:hover {
     background-color: #ebd834;
@@ -183,6 +156,34 @@ const Styles = styled.div`
   .table-body-row-selected {
     background-color: #fa3928;
   }
+  
+  .reset-filters-button {
+    z-index: 99;
+    padding: 10px 15px;
+    color: #ffffff;
+    font-size:22px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 3px #999;
+    margin-left: 300px;
+    bottom: 20px;
+    background-color: #d13e24;
+    position: fixed;
+  }
+  
+
+    
+  .reset-filters-button:hover {
+    background-color: #8e473e;
+  }
+
+  .reset-filters-button:active {
+    background-color: #8e473e;
+    box-shadow: 0 5px #666;
+    transform: translateY(3px);
+  }
+}
   
 `
 
@@ -224,7 +225,7 @@ function SelectColumnFilter({
   // Render a multi-select box
   return (
     <select
-      value={filterValue}
+      value={filterValue || ''}
       onChange={e => {
         setFilter(e.target.value || undefined)
       }}
@@ -387,6 +388,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
     nextPage,
     previousPage,
     setPageSize,
+      setAllFilters,
     state: {
       pageIndex,
       pageSize,
@@ -473,7 +475,9 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
         ))}
         <br />
       </div>
-      <table {...getTableProps()} className="table sticky">
+      <button className="reset-filters-button" onClick={() => setAllFilters([])}>Reset Filters</button>
+      <div className="table-sticky">
+      <table {...getTableProps()}>
         <thead className="header">
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -510,7 +514,9 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
               <tr {...row.getRowProps()}
                   className="table-body-row"
                   // onClick={() => console.log(row.original)}
-                  onClick={() => row.toggleRowSelected()}
+                  onClick={() => {row.toggleRowSelected()}
+                  // row.isSelected ？ （
+                  }
                   >
                 {row.cells.map(cell => {
                   return (
@@ -540,11 +546,23 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
           })}
         </tbody>
       </table>
-      {/*
-        Pagination can be built however you'd like.
-        This is just a very basic UI implementation:
-      */}
-      <div className="pagination">
+      </div>
+      <a href="https://web.northeastern.edu/ctni/">
+      <img className="ctni-logo-class" src={ctni_logo} alt="Logo" />;
+      </a>
+        <pre>
+        <div className="selected-rows">
+        <code>
+          {JSON.stringify(
+            {
+              selectedRowIds: selectedRowIds,
+            },
+            null,
+            2
+          )}
+        </code></div>
+      </pre>
+            <div className="pagination">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
         </button>{' '}
@@ -588,27 +606,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
           ))}
         </select>
       </div>
-      {/*<pre>*/}
-      {/*  <div className="json-info">*/}
-      {/*  <code>*/}
-      {/*    {JSON.stringify(*/}
-      {/*      {*/}
-      {/*        pageIndex,*/}
-      {/*        pageSize,*/}
-      {/*        pageCount,*/}
-      {/*        canNextPage,*/}
-      {/*        canPreviousPage,*/}
-      {/*        sortBy,*/}
-      {/*        groupBy,*/}
-      {/*        expanded: expanded,*/}
-      {/*        filters,*/}
-      {/*        selectedRowIds: selectedRowIds,*/}
-      {/*      },*/}
-      {/*      null,*/}
-      {/*      2*/}
-      {/*    )}*/}
-      {/*  </code></div>*/}
-      {/*</pre>*/}
+
     </>
   )
 }
@@ -620,16 +618,7 @@ function filterGreaterThan(rows, id, filterValue) {
     return rowValue >= filterValue
   })
 }
-
-// This is an autoRemove method on the filter function that
-// when given the new filter value and returns true, the filter
-// will be automatically removed. Normally this is just an undefined
-// check, but here, we want to remove the filter if it's not a number
 filterGreaterThan.autoRemove = val => typeof val !== 'number'
-
-// This is a custom aggregator that
-// takes in an array of leaf values and
-// returns the rounded median
 function roundedMedian(leafValues) {
   let min = leafValues[0] || 0
   let max = leafValues[0] || 0
@@ -658,45 +647,30 @@ const IndeterminateCheckbox = React.forwardRef(
     )
   }
 )
-
 function App() {
   // <div className="fixed-header">
+
+    const [studies, setStudies] = useState([]);
+
+    useEffect(() => {
+        fetch("/studies").then(response =>
+            response.json().then(data => {
+                setStudies(data);
+            })
+        );
+    }, []);
   const columns = React.useMemo(
     () => [
-
-      //         {
-      //   // Build our expander column
-      //   id: 'expander', // Make sure it has an ID
-      //
-      //   Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-      //     <span {...getToggleAllRowsExpandedProps()}>
-      //       {isAllRowsExpanded ? 'x' : 'y'}
-      //     </span>
-      //   ),
-      //   Cell: ({ row }) =>
-      //     // Use the row.canExpand and row.getToggleRowExpandedProps prop getter
-      //     // to build the toggle for expanding a row
-      //     row.canExpand ? (
-      //       <span
-      //         {...row.getToggleRowExpandedProps({
-      //           style: {
-      //             // We can even use the row.depth property
-      //             // and paddingLeft to indicate the depth
-      //             // of the row
-      //             paddingLeft: `${row.depth * 2}rem`,
-      //           },
-      //         })}
-      //       >
-      //         {row.isExpanded ? '👇' : '👉'}
-      //       </span>
-      //     ) : null,
-      // },
       {
         Header: 'Studies',
         columns: [
             {
             Header: 'IDs',
             accessor: 'Study_ID',
+          },
+          {
+            Header: 'Owner',
+            accessor: 'Study_Owner',
           },
           {
             Header: 'Desc.',
@@ -767,7 +741,7 @@ function App() {
             filter: 'between',
             // Aggregate the sum of all visits
             aggregate: 'average',
-            Aggregated: ({ value }) => `${value} (avg)`,
+            Aggregated: ({ value }) => `${parseFloat(value).toFixed(2)} (avg)`,
             canGroupBy: false,
           },
             {
@@ -777,7 +751,7 @@ function App() {
             filter: 'between',
             // Aggregate the sum of all visits
             aggregate: 'average',
-            Aggregated: ({ value }) => `${value} (avg)`,
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
             canGroupBy: false,
           },
             {
@@ -787,7 +761,7 @@ function App() {
             filter: 'between',
             // Aggregate the sum of all visits
             aggregate: 'average',
-            Aggregated: ({ value }) => `${value} (avg)`,
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
             canGroupBy: false,
           },
             {
@@ -804,7 +778,7 @@ function App() {
             filter: 'between',
             // Aggregate the sum of all visits
             aggregate: 'average',
-            Aggregated: ({ value }) => `${value} (avg)`,
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
             canGroupBy: false,
           },
             {
@@ -814,7 +788,7 @@ function App() {
             filter: 'between',
             // Aggregate the sum of all visits
             aggregate: 'average',
-            Aggregated: ({ value }) => `${value} (avg)`,
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
             canGroupBy: false,
           },
             {
@@ -824,7 +798,7 @@ function App() {
             filter: 'between',
             // Aggregate the sum of all visits
             aggregate: 'average',
-            Aggregated: ({ value }) => `${value} (avg)`,
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
             canGroupBy: false,
           },
             {
@@ -834,7 +808,7 @@ function App() {
             filter: 'between',
             // Aggregate the sum of all visits
             aggregate: 'average',
-            Aggregated: ({ value }) => `${value} (avg)`,
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
             canGroupBy: false,
           },
           {
@@ -850,46 +824,14 @@ function App() {
     []
   )
 
-  const data = jsondata
-  const [originalData] = React.useState(data)
-
-  // We need to keep the table from resetting the pageIndex when we
-  // Update data. So we can keep track of that flag with a ref.
-  // const skipResetRef = React.useRef(false)
-
-  // When our cell renderer calls updateMyData, we'll use
-  // the rowIndex, columnId and new value to update the
-  // original data
-  // const updateMyData = (rowIndex, columnId, value) => {
-  //   // We also turn on the flag to not reset the page
-  //   skipResetRef.current = true
-  //   setData(old =>
-  //     old.map((row, index) => {
-  //       if (index === rowIndex) {
-  //         return {
-  //           ...row,
-  //           [columnId]: value,
-  //         }
-  //       }
-  //       return row
-  //     })
-  //   )
-
-
-  // After data changes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
-  // React.useEffect(() => {
-  //   skipResetRef.current = false
-  // }, [data])
-  //
-  // // Let's add a data resetter/randomizer to help
-  // // illustrate that flow...
-  //
+  const data = studies
+  const testdata = jsontestdata
+  console.log(testdata)
   const [selectedRows, setSelectedRows] = React.useState({});
   return (
     <Styles>
-      <button className="action" onClick={()=>alert(JSON.stringify(selectedRows, null ,2))}>Download selected</button>
+      <button className="action" onClick={()=>alert(JSON.stringify(selectedRows, null ,2))}>Download</button>
+
 
       <Table
         columns={columns}
@@ -901,5 +843,6 @@ function App() {
   )
       // </div>
 }
+
 
 export default App
