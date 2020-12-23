@@ -25,12 +25,12 @@ const Styles = styled.div`
     display: block;
     left: 50%;
     margin-top: 10px;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(.5);
 
   }
   
   .table-sticky {
-    margin-top: 80px;
+    margin-top: 40px;
     height: 85%;
     width: 90%;
     position:fixed;
@@ -39,7 +39,7 @@ const Styles = styled.div`
 
   table {
     width: 100%;
-    margin-left: 280px;
+    margin-left: 220px;
     // margin-top: 40px;
     border-spacing: 0;
     border: 1px solid black;
@@ -97,13 +97,13 @@ const Styles = styled.div`
     }
     
     th {
-      font-size: 1.5rem;
+      font-size: 1rem;
     }
 
     td {
       input {
         border: 1;
-        font-size: 1rem;
+        font-size: .75rem;
         width: 0.5rem;
         padding: 1;
         margin: 1;
@@ -125,8 +125,8 @@ const Styles = styled.div`
   .action {
     margin-left: 280px;
     padding: 10px 15px;
-    bottom: 40px;
-    right: 42px;
+    bottom: 20px;
+    right: 22px;
     z-index: 20;
     color: #ffffff;
     position: fixed;

@@ -17,7 +17,7 @@ code {
 
 .column-filters {
   height: 100%; /* Full-height: remove this if you want "auto" height */
-  width: 260px; /* Set the width of the sidebar */
+  width: 220px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 10; /* Stay on top */
   top: 0; /* Stay at the top */
@@ -29,7 +29,7 @@ code {
 
 .selected-rows {
   height: 100%; /* Full-height: remove this if you want "auto" height */
-  width: 260px; /* Set the width of the sidebar */
+  width: 220px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 10; /* Stay on top */
   top: 0; /* Stay at the top */
@@ -40,7 +40,7 @@ code {
 }
 
 .toggle-all-columns {
-  font-size:28px;
+  font-size:22px;
 }
 
 input[type=checkbox] {
@@ -49,5 +49,5 @@ input[type=checkbox] {
 }
 
 .individual-columns {
-  font-size: 22px;
+  font-size: 16px;
 }
