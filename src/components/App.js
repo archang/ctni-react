@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react'
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import  Loading from './loading'
 
 import styled from 'styled-components'
 import {
@@ -845,4 +847,8 @@ function App() {
 }
 
 
-export default App
+// export default App
+
+export default withAuthenticationRequired(App, {
+  onRedirecting: () => <Loading />,
+});
