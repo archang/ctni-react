@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 
 import {Home, Studies, Manage} from "./components";
+import ProtectedRoute from "./auth/protected-route";
 // import {Manage} from "./components";
 
 const App = () => {
@@ -10,13 +11,13 @@ const App = () => {
     <div id="app" className="d-flex flex-column h-100">
       <div className="container flex-grow-1">
         <div className="mt-5">
-          <BrowserRouter>
+          {/*<BrowserRouter>*/}
             <Switch>
             <Route path="/" exact component={Home} />
             <Route path='/studies' component={Studies} />
             <Route path="/manage" component={Manage} />
           </Switch>
-          </BrowserRouter>
+          {/*</BrowserRouter>*/}
         </div>
       </div>
     </div>

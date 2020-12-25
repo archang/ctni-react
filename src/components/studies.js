@@ -849,7 +849,7 @@ const Studies = () => {
 }
 
 
-// export default App
+// export default Studies
 
 export default withAuthenticationRequired(Studies, {
   onRedirecting: () => <Loading />,

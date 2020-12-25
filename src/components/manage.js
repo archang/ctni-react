@@ -43,7 +43,7 @@ const Manage = () => {
   );
 };
 
-// export default Manage;
-export default withAuthenticationRequired(Manage, {
-  onRedirecting: () => <Loading />,
-});
+export default Manage;
+// export default withAuthenticationRequired(Manage, {
+//   onRedirecting: () => <Loading />,
+// });
