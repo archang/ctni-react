@@ -17,6 +17,7 @@ import jsondata from '../data.json'
 import jsontestdata from '../testdata.json'
 import makeData from '../makeData'
 import ctni_logo from '../ctni_logo.jpg';
+import AuthNav from "./auth-nav";
 // import { useSticky } from 'react-table-sticky';
 
 const Styles = styled.div`
@@ -28,8 +29,11 @@ const Styles = styled.div`
     left: 50%;
     margin-top: 10px;
     transform: translate(-50%, -50%) scale(.5);
-
   }
+  
+
+  
+  
   
   .table-sticky {
     margin-top: 40px;
@@ -552,6 +556,8 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
       <a href="https://web.northeastern.edu/ctni/">
       <img className="ctni-logo-class" src={ctni_logo} alt="Logo" />;
       </a>
+      {/*<div className="login-button">*/}
+      <AuthNav />
         <pre>
         <div className="selected-rows">
         <code>
