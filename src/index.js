@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 
