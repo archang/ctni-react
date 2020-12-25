@@ -8,6 +8,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling
+      - npm install @auth0/auth0-react
       - npm run build
   post_build:
     commands:
