@@ -51,5 +51,10 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "devDependencies": {
+    "webpack": "^4.44.2",
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }
