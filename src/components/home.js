@@ -2,6 +2,7 @@ import React from "react";
 import head_logo from '../head_logo.PNG';
 import AuthNav from "./auth-nav";
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 const Styles = styled.div`
   .landing-page {
@@ -54,7 +55,8 @@ const Home = () => (
       >
         CTNI
       </a>
-      <a href="http://localhost:3000/studies" className="login-button">Login</a>
+      <Link to="/studies" className="login-button">Login</Link>
+
     </p>
   </div></Styles>
 );
