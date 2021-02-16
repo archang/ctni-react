@@ -190,7 +190,29 @@ const Styles = styled.div`
     transform: translateY(3px);
   }
 }
+  .upload-button {
+    left: 70%;
+    padding: 10px 15px;
+    top: 10px;
+    z-index: 20;
+    color: #ffffff;
+    position: fixed;
+    font-size:18px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #0068E6;
+    border-radius: 10px;
+    box-shadow: 0 3px #999;
+  }
   
+    .upload-button:hover {
+    background-color: #155cb3;
+  }
+  .upload-button:active {
+    background-color: #155cb3;
+    box-shadow: 0 5px #666;
+    // transform: translateY(.5px);
+}
 `
 
 // Create an editable cell renderer
@@ -395,6 +417,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
     previousPage,
     setPageSize,
       setAllFilters,
+       selectedFlatRows,
     state: {
       pageIndex,
       pageSize,
@@ -681,12 +704,14 @@ const Studies = () => {
           {
             Header: 'Owner',
             accessor: 'Study_Owner',
+            aggregate: 'unique',
           },
           {
             Header: 'Desc.',
             accessor: 'Study_Description',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            aggregate: 'unique',
             canGroupBy: false,
           },
           {
@@ -694,6 +719,7 @@ const Studies = () => {
             accessor: 'Study_Name',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            aggregate: 'unique',
             canGroupBy: false,
           },
           {
@@ -701,6 +727,7 @@ const Studies = () => {
             accessor: 'Study_Rating',
             Filter: SelectColumnFilter,
             filter: 'includes',
+            aggregate: 'unique',
             canGroupBy: false,
           },
           {
@@ -708,6 +735,7 @@ const Studies = () => {
             accessor: 'Study_Comments',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
+            aggregate: 'unique',
             canGroupBy: false,
           },
 
