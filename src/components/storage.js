@@ -1,6 +1,38 @@
 import React, { Component } from "react";
+import {useMemo} from 'react';
 import UploadService from "../services/upload-files.service";
 import styled from "styled-components";
+import {useDropzone} from 'react-dropzone';
+import axios from "axios"
+import http from "../http-common";
+
+const baseStyle = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  padding: "20px",
+  borderWidth: 2,
+  borderRadius: 20,
+  borderColor: "#26C2E7",
+  borderStyle: "dashed",
+  backgroundColor: "#fafafa",
+  color: "#c4c4c4",
+  outline: "none",
+  transition: "border .24s ease-in-out"
+};
+
+const activeStyle = {
+  borderColor: '#2196f3'
+};
+
+const acceptStyle = {
+  borderColor: '#00e676'
+};
+
+const rejectStyle = {
+  borderColor: '#ff1744'
+};
 
 const Styles = styled.div`
   .back-button {
@@ -23,12 +55,71 @@ const Styles = styled.div`
     .back-button:hover {
     background-color: #155cb3;
   }
+
   .back-button:active {
     background-color: #155cb3;
     box-shadow: 0 5px #666;
     // transform: translateY(.5px);
 }
 `
+
+function Basic(props) {
+const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+    acceptedFiles
+  } = useDropzone({accept: 'image/*'});
+
+  const style = useMemo(() => ({
+    ...baseStyle,
+    ...(isDragActive ? activeStyle : {}),
+    ...(isDragAccept ? acceptStyle : {}),
+    ...(isDragReject ? rejectStyle : {})
+  }), [
+    isDragActive,
+    isDragReject,
+    isDragAccept
+  ]);
+  const uploadFiles = () => {
+
+    for (var i = 0; i < acceptedFiles.length; i++) {
+        let formData = new FormData();
+        let file = acceptedFiles[i];
+        formData.append('file', file);
+        console.log(formData)
+        http.post("/upload", formData, {
+          headers: {
+          "Content-Type": "multipart/form-data",
+      }
+    });
+    }
+  }
+
+  const files = acceptedFiles.map(file => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
+
+  return (
+    <section className="container">
+      <div {...getRootProps({style})}>
+        <input {...getInputProps()} />
+        <p>Drag 'n' drop some files here</p>
+      </div>
+      <aside>
+        <h4>Files</h4>
+        <ul>{files}</ul>
+      </aside>
+      <button onClick={uploadFiles}>Submit</button>
+    </section>
+  );
+}
+
+<Basic />
 
 export default class UploadFiles extends Component {
   constructor(props) {
@@ -45,7 +136,6 @@ export default class UploadFiles extends Component {
       fileInfos: [],
     };
   }
-
   componentDidMount() {
     UploadService.getFiles().then((response) => {
       this.setState({
@@ -53,7 +143,6 @@ export default class UploadFiles extends Component {
       });
     });
   }
-
   selectFiles(event) {
     this.setState({
       progressInfos: [],
@@ -79,7 +168,6 @@ export default class UploadFiles extends Component {
         })
       })
   }
-
   uploadFiles() {
     const selectedFiles = this.state.selectedFiles;
 
@@ -110,6 +198,7 @@ export default class UploadFiles extends Component {
     return (
         <Styles>
       <div>
+        <Basic />
         <a href="http://localhost:3000/studies" className="back-button">Back to Studies</a>
         {progressInfos &&
           progressInfos.map((progressInfo, index) => (
@@ -130,29 +219,6 @@ export default class UploadFiles extends Component {
             </div>
           ))}
 
-        <div className="row my-3">
-          <div className="col-8">
-            <label className="btn btn-default p-0">
-              <input type="file" multiple onChange={this.selectFiles} />
-              {/*<input*/}
-              {/*    type="file" multiple*/}
-              {/*    directory=""*/}
-              {/*    webkitdirectory=""*/}
-              {/*    onChange={this.selectFiles}*/}
-              {/*  />*/}
-            </label>
-          </div>
-
-          <div className="col-4">
-            <button
-              className="btn btn-success btn-sm"
-              disabled={!selectedFiles}
-              onClick={this.uploadFiles}
-            >
-              Upload
-            </button>
-          </div>
-        </div>
 
         {message.length > 0 && (
           <div className="alert alert-secondary" role="alert">

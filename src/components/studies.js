@@ -178,7 +178,29 @@ const Styles = styled.div`
     position: fixed;
   }
   
-
+    .upload-button {
+    left: 70%;
+    padding: 10px 15px;
+    top: 10px;
+    z-index: 20;
+    color: #ffffff;
+    position: fixed;
+    font-size:18px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #0068E6;
+    border-radius: 10px;
+    box-shadow: 0 3px #999;
+  }
+  
+    .upload-button:hover {
+    background-color: #155cb3;
+  }
+  .upload-button:active {
+    background-color: #155cb3;
+    box-shadow: 0 5px #666;
+    // transform: translateY(.5px);
+}
     
   .reset-filters-button:hover {
     background-color: #8e473e;
@@ -869,6 +891,7 @@ const Studies = () => {
   return (
     <Styles>
       <button className="action" onClick={()=>alert(JSON.stringify(selectedRows, null ,2))}>Download</button>
+      <a href="http://localhost:3000/storage" className="upload-button">Upload</a>
 
 
       <Table
