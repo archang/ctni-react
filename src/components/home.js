@@ -1,6 +1,5 @@
 import React from "react";
 import head_logo from '../head_logo.PNG';
-import AuthNav from "./auth-nav";
 import styled from "styled-components";
 
 const Styles = styled.div`
@@ -38,7 +37,6 @@ const Styles = styled.div`
     // transform: translateY(.5px);
 }
 `
-
 
 const Home = () => (
     <Styles>

@@ -13,6 +13,7 @@
     "package.json": "^2.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-dropzone": "^11.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-table": "^7.6.2",
@@ -23,7 +24,7 @@
     "semantic-ui-react": "^2.0.1",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4",
-    "react-dropzone": "^11.3.1"
+    "axios": "^0.21.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -52,5 +53,10 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "devDependencies": {
+    "webpack": "^4.44.2",
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }

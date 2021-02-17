@@ -21,19 +21,15 @@ const baseStyle = {
   outline: "none",
   transition: "border .24s ease-in-out"
 };
-
 const activeStyle = {
   borderColor: '#2196f3'
 };
-
 const acceptStyle = {
   borderColor: '#00e676'
 };
-
 const rejectStyle = {
   borderColor: '#ff1744'
 };
-
 const Styles = styled.div`
   .back-button {
     padding: 10px 15px;
@@ -71,7 +67,7 @@ const {
     isDragAccept,
     isDragReject,
     acceptedFiles
-  } = useDropzone({accept: 'image/*'});
+  } = useDropzone();
 
   const style = useMemo(() => ({
     ...baseStyle,
@@ -89,11 +85,15 @@ const {
         let formData = new FormData();
         let file = acceptedFiles[i];
         formData.append('file', file);
-        console.log(formData)
         http.post("/upload", formData, {
           headers: {
           "Content-Type": "multipart/form-data",
-      }
+      }})
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
     });
     }
   }
@@ -118,7 +118,6 @@ const {
     </section>
   );
 }
-
 <Basic />
 
 export default class UploadFiles extends Component {
@@ -200,35 +199,6 @@ export default class UploadFiles extends Component {
       <div>
         <Basic />
         <a href="http://localhost:3000/studies" className="back-button">Back to Studies</a>
-        {progressInfos &&
-          progressInfos.map((progressInfo, index) => (
-            <div className="mb-2" key={index}>
-              <span>{progressInfo.fileName}</span>
-              <div className="progress">
-                <div
-                  className="progress-bar progress-bar-info"
-                  role="progressbar"
-                  aria-valuenow={progressInfo.percentage}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  style={{ width: progressInfo.percentage + "%" }}
-                >
-                  {progressInfo.percentage}%
-                </div>
-              </div>
-            </div>
-          ))}
-
-
-        {message.length > 0 && (
-          <div className="alert alert-secondary" role="alert">
-            <ul>
-              {message.map((item, i) => {
-                return <li key={i}>{item}</li>;
-              })}
-            </ul>
-          </div>
-        )}
 
         <div className="card">
           <div className="card-header">Wait till you see the "Upload successful" before navigating away!</div>

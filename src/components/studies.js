@@ -13,9 +13,6 @@ import {
   useExpanded,
 } from 'react-table'
 import matchSorter from 'match-sorter'
-import jsondata from '../data.json'
-import jsontestdata from '../testdata.json'
-import makeData from '../makeData'
 import ctni_logo from '../ctni_logo.jpg';
 import AuthNav from "./auth-nav";
 // import { useSticky } from 'react-table-sticky';
@@ -421,6 +418,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
+      disableSubRowSelect,
     getToggleHideAllColumnsProps,
     getTableBodyProps,
       allColumns,
@@ -492,7 +490,8 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
             ),
             // The cell can use the individual row's getToggleRowSelectedProps method
             // to the render a checkbox
-            Cell: ({ row }) => (
+            Cell: ({ row }) =>
+                disableSubRowSelect  && row.depth > 0 ? null : (
               <div>
                 <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
               </div>
@@ -719,10 +718,6 @@ const Studies = () => {
       {
         Header: 'Studies',
         columns: [
-            {
-            Header: 'IDs',
-            accessor: 'Study_ID',
-          },
           {
             Header: 'Owner',
             accessor: 'Study_Owner',
@@ -885,8 +880,6 @@ const Studies = () => {
   )
 
   const data = studies
-  const testdata = jsontestdata
-  console.log(testdata)
   const [selectedRows, setSelectedRows] = React.useState({});
   return (
     <Styles>
