@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import {Home, Studies, Manage} from "./components";
 import ProtectedRoute from "./auth/protected-route";
-// import {Manage} from "./components";
+import UploadFiles from "./components/storage";
 
 const App = () => {
   return (
@@ -16,6 +16,7 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path='/studies' component={Studies} />
             <Route path="/manage" component={Manage} />
+            <Route path="/storage" component={UploadFiles} />
           </Switch>
           {/*</BrowserRouter>*/}
         </div>
