@@ -52,9 +52,9 @@ const Home = () => (
       >
         CTNI
       </a>
-      <a href="http://localhost:3000/studies" className="login-button">Login</a>
+      <a href="/studies" className="login-button">Login</a>
     </p>
-  </div></Styles>
+  </div></Styles> 
 );
 
 export default Home;

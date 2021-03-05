@@ -5,6 +5,9 @@ import styled from "styled-components";
 import {useDropzone} from 'react-dropzone';
 import axios from "axios"
 import http from "../http-common";
+import {withAuthenticationRequired} from "@auth0/auth0-react";
+import Loading from "./loading";
+
 
 const baseStyle = {
   flex: 1,
@@ -13,6 +16,7 @@ const baseStyle = {
   alignItems: "center",
   padding: "20px",
   borderWidth: 2,
+
   borderRadius: 20,
   borderColor: "#26C2E7",
   borderStyle: "dashed",
@@ -84,13 +88,20 @@ const {
     for (var i = 0; i < acceptedFiles.length; i++) {
         let formData = new FormData();
         let file = acceptedFiles[i];
+        console.log(typeof(formData.get('file')))
+
         formData.append('file', file);
+        // formData.set('name',formData.get('file').path)
+        // formData.set('file'[''],)
+        // console.log(formData.get('file'))
         http.post("/upload", formData, {
           headers: {
           "Content-Type": "multipart/form-data",
-      }})
+      }}).then(res => {
+        http.post("/upload", file.path)
+        })
     .then(function(response) {
-      console.log(response);
+
     })
     .catch(function (error) {
       console.log(error);
@@ -120,7 +131,8 @@ const {
 }
 <Basic />
 
-export default class UploadFiles extends Component {
+
+class UploadFiles extends Component {
   constructor(props) {
     super(props);
     this.selectFiles = this.selectFiles.bind(this);
@@ -215,3 +227,7 @@ export default class UploadFiles extends Component {
     );
   }
 }
+
+export default withAuthenticationRequired(UploadFiles, {
+  onRedirecting: () => <Loading />,
+});

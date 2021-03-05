@@ -719,21 +719,22 @@ const Studies = () => {
         Header: 'Studies',
         columns: [
           {
+            Header: 'Name.',
+            accessor: 'Study_ID',
+            // Use our custom `fuzzyText` filter on this column
+            filter: 'fuzzyText',
+            aggregate: 'unique',
+            canGroupBy: true,
+          },
+          {
             Header: 'Owner',
             accessor: 'Study_Owner',
             aggregate: 'unique',
           },
+
           {
             Header: 'Desc.',
             accessor: 'Study_Description',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-            aggregate: 'unique',
-            canGroupBy: false,
-          },
-          {
-            Header: 'Name.',
-            accessor: 'Study_Name',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
             aggregate: 'unique',
