@@ -1,8 +1,19 @@
 import React, {useEffect, useState} from 'react'
+
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import  Loading from './loading'
-
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { saveAs } from 'file-saver';
 import styled from 'styled-components'
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+} from "react-router-dom";
+
+
+//import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import {
   useTable,
   usePagination,
@@ -18,11 +29,21 @@ import jsontestdata from '../testdata.json'
 import makeData from '../makeData'
 import ctni_logo from '../ctni_logo.jpg';
 import AuthNav from "./auth-nav";
+import http from "../http-common";
+
+var sharedgrabbedarray=[];
+ let h="hello"
 // import { useSticky } from 'react-table-sticky';
 
+// const nodemailer = require('nodemailer');
+// const smtpTransport = require('nodemailer-smtp-transport');
+// const cors = require("cors")({
+//   origin: true
+// });
 const Styles = styled.div`
   padding: 1rem;
-  
+  flex: 1;
+   
   .ctni-logo-class {
     position: absolute;
     display: block;
@@ -32,7 +53,23 @@ const Styles = styled.div`
   }
   
 
-  
+  ButtonDropdown.propTypes = {
+  disabled: PropTypes.bool,
+  direction: PropTypes.oneOf(['up', 'down', 'left', 'right']),
+  group: PropTypes.bool,
+  isOpen: PropTypes.bool,
+  tag: PropTypes.string,
+  toggle: PropTypes.func
+};
+
+DropdownToggle.propTypes = {
+  caret: PropTypes.bool,
+  color: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  'data-toggle': PropTypes.string,
+  'aria-haspopup': PropTypes.bool
+};
   
   
   .table-sticky {
@@ -151,7 +188,29 @@ const Styles = styled.div`
   .action:active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
-    transform: translateY(3px);
+    //transform: translateY(3px);
+}
+.option {
+    
+    z-index: 20;
+    // color: #ffffff;
+   //height:20px;
+    font-size:12px;
+    cursor: pointer;
+    text-align: center;
+   
+    border-radius: 10px;
+    box-shadow: 0 3px #999;
+  }
+  
+  .option:hover {
+    background-color: #3e8e41
+  }
+
+  .option:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    //transform: translateY(3px);
 }
  
   
@@ -191,6 +250,22 @@ const Styles = styled.div`
     background-color: #0068E6;
     border-radius: 10px;
     box-shadow: 0 3px #999;
+   
+  }
+  .share-button {
+    left: 40%;
+    padding: 50px 75px;
+    top: 20px;
+    
+    color: #ffffff;
+    position: fixed;
+    font-size:18px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #0068E6;
+    border-radius: 10px;
+    box-shadow: 0 3px #999;
+   
   }
   
     .upload-button:hover {
@@ -212,29 +287,7 @@ const Styles = styled.div`
     transform: translateY(3px);
   }
 }
-  .upload-button {
-    left: 70%;
-    padding: 10px 15px;
-    top: 10px;
-    z-index: 20;
-    color: #ffffff;
-    position: fixed;
-    font-size:18px;
-    cursor: pointer;
-    text-align: center;
-    background-color: #0068E6;
-    border-radius: 10px;
-    box-shadow: 0 3px #999;
-  }
-  
-    .upload-button:hover {
-    background-color: #155cb3;
-  }
-  .upload-button:active {
-    background-color: #155cb3;
-    box-shadow: 0 5px #666;
-    // transform: translateY(.5px);
-}
+ 
 `
 
 // Create an editable cell renderer
@@ -700,214 +753,416 @@ const IndeterminateCheckbox = React.forwardRef(
     )
   }
 )
-const Studies = () => {
+const Studies = () =>{
 // var Studies = function() {
 // function Studies() {
   // <div className="fixed-header">
 
-    const [studies, setStudies] = useState([]);
+  const [studies, setStudies] = useState([]);
 
-    useEffect(() => {
-        fetch("/studies").then(response =>
-            response.json().then(data => {
-                setStudies(data);
-            })
-        );
-    }, []);
+  useEffect(() => {
+    fetch("/studies").then(response =>
+        response.json().then(data => {
+          setStudies(data);
+        })
+    );
+  }, []);
+
+
+//initialize jsZip
+  var JSZip = require("jszip");
+  let zip = new JSZip();
+  let photoZip = zip.folder();
+
+// useEffect(() => {
+//      //// API call to load job info from dynamo db
+//   function loadJob() {
+//     return API.get("api name", "/tablename/tableinfo", {
+//   'queryStringParameters': {jobId: props.match.params.id}
+//    });
+//   }
+//    /// onload function to load job info and get a count of files
+//     async function onLoad() {
+//
+//       try {
+//         const job = await loadJob();
+//         setJob(job[0])
+//
+//         const ImagesUploaded = await Storage.list(`${job[0].jobId}`);
+//         setImagesUploaded(ImagesUploaded);
+//
+//         } catch (e) {
+//           alert(e);
+//       }
+//
+//     }
+//
+//     onLoad();
+//   }, [props.match.params.id,]);
+
+
+  /// On download button click, loop through / download images using the key given from storage.list in onload function
+  async function handleDownloadClick(event) {
+    event.preventDefault();
+    console.log(selectedRows)
+    let studygrabbedarray = [];
+    for (let i in selectedRows) {
+      console.log("id", i)
+      studygrabbedarray.push(studies[i])
+      console.log("hi", studygrabbedarray);
+    }
+    http.post("/download", studygrabbedarray, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+
+  }
+
+  function handleShareClick(event) {
+  event.preventDefault();
+console.log("mama")
+  console.log(selectedRows)
+
+  // const enteredEmail = prompt('Please enter recipient email ');
+  // console.log("emaillll",enteredEmail);
+
+  for (let i in selectedRows) {
+    console.log("id", i)
+    sharedgrabbedarray.push(studies[i])
+    console.log("hihuy", sharedgrabbedarray);
+  }
+
+
+
+
+  // var sesAccessKey = 'abarkha1@gmail.com';
+  //    var sesSecretKey = 'Aero8568';
+  //
+  //   // let testAccount = await nodemailer.createTestAccount();
+  //
+  //   // create reusable transporter object using the default SMTP transport
+  //   let transporter = nodemailer.createTransport(smtpTransport({
+  //     service: 'gmail',
+  //     auth: {
+  //         user: sesAccessKey,
+  //         pass: sesSecretKey
+  //     }
+  //   }));
+  //
+  //   // send mail with defined transport object
+  //   let info = await transporter.sendMail({
+  //       from: '"Fred Foo 👻" <foo@example.com>', // sender address
+  //       to: 'abarkha1@gmail.com', // list of receivers
+  //       subject: 'Hello ✔', // Subject line
+  //       text: 'Hello world?', // plain text body
+  //       html: '<b>Hello world?</b>' // html body
+  //   });
+  //
+  //   console.log('Message sent: %s', info.messageId);
+  //   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  //
+  //   // Preview only available when sending through an Ethereal account
+  //   console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+
+
+//
+
+
+  let study_name="Study_Name"
+  let names=[]
+    for (let i=0;i<sharedgrabbedarray.length;i++){
+      names.push(sharedgrabbedarray[i][study_name])
+    }
+    console.log("hey you", names)
+ http.post("/download", sharedgrabbedarray, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+
+window.location.assign(`http://localhost:3000/share?arr=${names}`);
+
+
+}
+
+
+
+
+
+  // for (var j = 0; j < studygrabbedarray.length; j++) {
+  //   let file = studygrabbedarray[j];
+  //   // formData.push('study', file);
+  //   console.log(file)
+  //   http.post("/download", file, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     }
+  //   });
+  // }
+
+
+     //console.log("hello all",studies)
+
+    // const imagesAsArray = [...selectedRows];
+    //
+    // for (let i = 0; i < imagesAsArray.length; i++) {
+    //   await DownloadFileFromS3(imagesAsArray[i]);
+    // }
+    // /// waits for "await DownloadFileFromS3, then executes the save as which saves the zipped folder created in "DownloadFileFromS3"
+    // zip.generateAsync({type: "blob"})
+    //     .then(function (content) {
+    //       saveAs(content);
+    //     });
+
+
+
+  /// download each file from s3 and put it in the zip folder
+  // async function DownloadFileFromS3(fileToDownload) {
+  //
+  //   const result = await Storage.get(fileToDownload.key, {download: true})
+  //
+  //   let mimeType = result.ContentType
+  //   let fileName = fileToDownload.key
+  //   let blob = new Blob([result.Body], {type: mimeType})
+  //
+  //   photoZip.file(fileName[1], blob)
+  //
+  // }
+
+  // return(
+  //
+  //      <IonPage>
+  //      <IonHeader>
+  //        <IonToolbar>
+  //      <IonButtons slot="start">
+  //          <IonBackButton/>
+  //      </IonButtons>
+  //          <IonTitle>Download Images</IonTitle>
+  //        </IonToolbar>
+  //      </IonHeader>
+  //      <IonContent className="ion-padding">
+  //      <IonButton onclick={handleDownloadClick}> download </IonButton>
+  //      </IonContent>
+  //      </IonPage>
+  //    );
+
+
   const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Studies',
-        columns: [
+      () => [
+        {
+          Header: 'Studies',
+          columns: [
             {
-            Header: 'IDs',
-            accessor: 'Study_ID',
-          },
-          {
-            Header: 'Owner',
-            accessor: 'Study_Owner',
-            aggregate: 'unique',
-          },
-          {
-            Header: 'Desc.',
-            accessor: 'Study_Description',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-            aggregate: 'unique',
-            canGroupBy: false,
-          },
-          {
-            Header: 'Name.',
-            accessor: 'Study_Name',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-            aggregate: 'unique',
-            canGroupBy: false,
-          },
-          {
-            Header: 'Rating',
-            accessor: 'Study_Rating',
-            Filter: SelectColumnFilter,
-            filter: 'includes',
-            aggregate: 'unique',
-            canGroupBy: false,
-          },
-          {
-            Header: 'Comments',
-            accessor: 'Study_Comments',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-            aggregate: 'unique',
-            canGroupBy: false,
-          },
+              Header: 'IDs',
+              accessor: 'Study_ID',
+            },
+            {
+              Header: 'Owner',
+              accessor: 'Study_Owner',
+              aggregate: 'unique',
+            },
+            {
+              Header: 'Desc.',
+              accessor: 'Study_Description',
+              // Use our custom `fuzzyText` filter on this column
+              filter: 'fuzzyText',
+              aggregate: 'unique',
+              canGroupBy: false,
+            },
+            {
+              Header: 'Name.',
+              accessor: 'Study_Name',
+              // Use our custom `fuzzyText` filter on this column
+              filter: 'fuzzyText',
+              aggregate: 'unique',
+              canGroupBy: false,
+            },
+            {
+              Header: 'Rating',
+              accessor: 'Study_Rating',
+              Filter: SelectColumnFilter,
+              filter: 'includes',
+              aggregate: 'unique',
+              canGroupBy: false,
+            },
+            {
+              Header: 'Comments',
+              accessor: 'Study_Comments',
+              // Use our custom `fuzzyText` filter on this column
+              filter: 'fuzzyText',
+              aggregate: 'unique',
+              canGroupBy: false,
+            },
 
-        ],
-      },
-      {
-        Header: ' ',
-        columns: [
-          {
-            Header: 'ID',
-            accessor: 'Scan_ID',
-            Filter: SliderColumnFilter,
-            filter: 'equals',
-            canGroupBy: false,
-          },
-          {
-            Header: 'Name',
-            accessor: 'Scan_Name',
-            Filter: SelectColumnFilter,
-            filter: 'includes',
-            canGroupBy: false,
-          },
+          ],
+        },
+        {
+          Header: ' ',
+          columns: [
             {
-            Header: 'Time',
-            accessor: 'Scan_Time',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-            canGroupBy: false,
-          },
+              Header: 'ID',
+              accessor: 'Scan_ID',
+              Filter: SliderColumnFilter,
+              filter: 'equals',
+              canGroupBy: false,
+            },
             {
-            Header: 'FOV',
-            accessor: 'FOV',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-            canGroupBy: false,
-          },
+              Header: 'Name',
+              accessor: 'Scan_Name',
+              Filter: SelectColumnFilter,
+              filter: 'includes',
+              canGroupBy: false,
+            },
             {
-            Header: 'Echotime',
-            accessor: 'Echotime',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            // Aggregate the sum of all visits
-            aggregate: 'average',
-            Aggregated: ({ value }) => `${parseFloat(value).toFixed(2)} (avg)`,
-            canGroupBy: false,
-          },
+              Header: 'Time',
+              accessor: 'Scan_Time',
+              // Use our custom `fuzzyText` filter on this column
+              filter: 'fuzzyText',
+              canGroupBy: false,
+            },
             {
-            Header: 'Rep. Time',
-            accessor: 'Repetitiontime',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            // Aggregate the sum of all visits
-            aggregate: 'average',
-            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
-            canGroupBy: false,
-          },
+              Header: 'FOV',
+              accessor: 'FOV',
+              // Use our custom `fuzzyText` filter on this column
+              filter: 'fuzzyText',
+              canGroupBy: false,
+            },
             {
-            Header: '# Rep.',
-            accessor: 'Nrepetition',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            // Aggregate the sum of all visits
-            aggregate: 'average',
-            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
-            canGroupBy: false,
-          },
+              Header: 'Echotime',
+              accessor: 'Echotime',
+              Filter: NumberRangeColumnFilter,
+              filter: 'between',
+              // Aggregate the sum of all visits
+              aggregate: 'average',
+              Aggregated: ({value}) => `${parseFloat(value).toFixed(2)} (avg)`,
+              canGroupBy: false,
+            },
             {
-            Header: 'Spat. Res.',
-            accessor: 'SpatResol',
-            // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
-            canGroupBy: false,
-          },
+              Header: 'Rep. Time',
+              accessor: 'Repetitiontime',
+              Filter: NumberRangeColumnFilter,
+              filter: 'between',
+              // Aggregate the sum of all visits
+              aggregate: 'average',
+              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
+              canGroupBy: false,
+            },
             {
-            Header: 'Thickness',
-            accessor: 'SliceThick',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            // Aggregate the sum of all visits
-            aggregate: 'average',
-            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
-            canGroupBy: false,
-          },
+              Header: '# Rep.',
+              accessor: 'Nrepetition',
+              Filter: NumberRangeColumnFilter,
+              filter: 'between',
+              // Aggregate the sum of all visits
+              aggregate: 'average',
+              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
+              canGroupBy: false,
+            },
             {
-            Header: '# Slice',
-            accessor: 'NSlice',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            // Aggregate the sum of all visits
-            aggregate: 'average',
-            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
-            canGroupBy: false,
-          },
+              Header: 'Spat. Res.',
+              accessor: 'SpatResol',
+              // Use our custom `fuzzyText` filter on this column
+              filter: 'fuzzyText',
+              canGroupBy: false,
+            },
             {
-            Header: 'Slice Gap',
-            accessor: 'SliceGap',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            // Aggregate the sum of all visits
-            aggregate: 'average',
-            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
-            canGroupBy: false,
-          },
+              Header: 'Thickness',
+              accessor: 'SliceThick',
+              Filter: NumberRangeColumnFilter,
+              filter: 'between',
+              // Aggregate the sum of all visits
+              aggregate: 'average',
+              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
+              canGroupBy: false,
+            },
             {
-            Header: 'Slice Dist.',
-            accessor: 'SliceDistance',
-            Filter: NumberRangeColumnFilter,
-            filter: 'between',
-            // Aggregate the sum of all visits
-            aggregate: 'average',
-            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
-            canGroupBy: false,
-          },
-          {
-            Header: 'Orientation',
-            accessor: 'SliceOrient',
-            Filter: SelectColumnFilter,
-            filter: 'includes',
-            canGroupBy: false,
-          }
-        ],
-      },
-    ],
-    []
+              Header: '# Slice',
+              accessor: 'NSlice',
+              Filter: NumberRangeColumnFilter,
+              filter: 'between',
+              // Aggregate the sum of all visits
+              aggregate: 'average',
+              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
+              canGroupBy: false,
+            },
+            {
+              Header: 'Slice Gap',
+              accessor: 'SliceGap',
+              Filter: NumberRangeColumnFilter,
+              filter: 'between',
+              // Aggregate the sum of all visits
+              aggregate: 'average',
+              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
+              canGroupBy: false,
+            },
+            {
+              Header: 'Slice Dist.',
+              accessor: 'SliceDistance',
+              Filter: NumberRangeColumnFilter,
+              filter: 'between',
+              // Aggregate the sum of all visits
+              aggregate: 'average',
+              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
+              canGroupBy: false,
+            },
+            {
+              Header: 'Orientation',
+              accessor: 'SliceOrient',
+              Filter: SelectColumnFilter,
+              filter: 'includes',
+              canGroupBy: false,
+            }
+          ],
+        },
+      ],
+      []
   )
 
   const data = studies
   const testdata = jsontestdata
   console.log(testdata)
   const [selectedRows, setSelectedRows] = React.useState({});
+
+  const [dropdownOpen, setOpen] = useState(false);
+
+  const toggle = () => setOpen(!dropdownOpen);
+
+
   return (
-    <Styles>
-      <button className="action" onClick={()=>alert(JSON.stringify(selectedRows, null ,2))}>Download</button>
-      <a href="http://localhost:3000/storage" className="upload-button">Upload</a>
+      <Styles>
+        <ButtonDropdown className="action" isOpen={dropdownOpen} toggle={toggle}>
+          <DropdownToggle caret className="action">
+            Manage
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem className="option" onClick={handleDownloadClick}>Download</DropdownItem>
+            {/*()=>alert(JSON.stringify(selectedRows, null ,2))*/}
+            <DropdownItem className="option"onClick={handleShareClick}   >Share</DropdownItem>
+            {/**/}
+          </DropdownMenu>
+        </ButtonDropdown>
 
 
-      <Table
-        columns={columns}
-        data={data}
-        setSelectedRows={setSelectedRows}
-        //updateMyData={updateMyData}
-      />
-    </Styles>
+        {/*<button className="action" onClick={()=>alert(JSON.stringify(selectedRows, null ,2))}>Manage</button>*/}
+        <a href="http://localhost:3000/storage" className="upload-button">Upload</a>
+
+
+        <Table
+            columns={columns}
+            data={data}
+            setSelectedRows={setSelectedRows}
+            //updateMyData={updateMyData}
+        />
+      </Styles>
   )
-      // </div>
+  // </div>
+
 }
 
 
 // export default Studies
-
+export { sharedgrabbedarray}
 export default withAuthenticationRequired(Studies, {
   onRedirecting: () => <Loading />,
 });
