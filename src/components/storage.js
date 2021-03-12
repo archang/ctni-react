@@ -88,8 +88,6 @@ const {
     for (var i = 0; i < acceptedFiles.length; i++) {
         let formData = new FormData();
         let file = acceptedFiles[i];
-        console.log(typeof(formData.get('file')))
-
         formData.append('file', file);
         // formData.set('name',formData.get('file').path)
         // formData.set('file'[''],)
@@ -97,12 +95,7 @@ const {
         http.post("/upload", formData, {
           headers: {
           "Content-Type": "multipart/form-data",
-      }}).then(res => {
-        http.post("/upload", file.path)
-        })
-    .then(function(response) {
-
-    })
+      }})
     .catch(function (error) {
       console.log(error);
     });

@@ -744,7 +744,7 @@ const Studies = () => {
             Header: 'Rating',
             accessor: 'Study_Rating',
             Filter: SelectColumnFilter,
-            filter: 'includes',
+            filter: 'equals',
             aggregate: 'unique',
             canGroupBy: false,
           },
@@ -765,7 +765,7 @@ const Studies = () => {
           {
             Header: 'ID',
             accessor: 'Scan_ID',
-            Filter: SliderColumnFilter,
+            Filter: SelectColumnFilter,
             filter: 'equals',
             canGroupBy: false,
           },
