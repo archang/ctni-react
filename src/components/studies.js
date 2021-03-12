@@ -871,7 +871,7 @@ const Studies = () => {
             Header: 'Orientation',
             accessor: 'SliceOrient',
             Filter: SelectColumnFilter,
-            filter: 'includes',
+            filter: 'equals',
             canGroupBy: false,
           }
         ],
