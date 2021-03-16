@@ -1,5 +1,7 @@
-import React, {Component, useState} from 'react'
+import React, {Component, useEffect, useState} from 'react'
 import  {sharedgrabbedarray}  from './studies.js'
+import http from "../http-common";
+import async from "async";
 
 
 
@@ -13,6 +15,8 @@ const IdFromURL = Params.get('arr');
 
   const [email, setEmail] = useState('')
   const [comment, setComment] = useState('')
+    const [usergroup, setusergroup] = useState('')
+    const [groups,setgroups]=useState('')
     let grr;
 
     grr=IdFromURL
@@ -26,14 +30,35 @@ const IdFromURL = Params.get('arr');
     //     names.push(json[study_Name])
     //
     // }
+useEffect(() => {
+    fetch("/groups").then(response =>
+        response.json().then(data => {
+          setgroups(data);
+        })
+    );
+  }, []);
+    var groupsgrabbed=groups
+    console.log("grps",groupsgrabbed)
 
  console.log("nnn", grr)
   const submit = e => {
-    e.preventDefault()
-    fetch(`https://hooks.zapier.com/hooks/catch/9665392/ongbdjr/`, {
-      method: 'POST',
-      body: JSON.stringify({ email, comment,grr }),
-    })
+      e.preventDefault()
+      console.log("email", email)
+      console.log("usergroup", usergroup)
+      var groupdata = []
+      groupdata.push(email)
+      groupdata.push(usergroup)
+      http.post("/email", groupdata, {
+          headers: {
+              "Content-Type": "application/json",
+          }
+      });
+      if (email){
+      fetch(`https://hooks.zapier.com/hooks/catch/9665392/ongbdjr/`, {
+          method: 'POST',
+          body: JSON.stringify({email, comment, grr}),
+      })
+  }
   }
   return (
     <form onSubmit={submit}>
@@ -44,12 +69,21 @@ const IdFromURL = Params.get('arr');
         onChange={e => setComment(e.target.value)}
         />
       <br />
-      <label htmlFor="email">Email (optional)</label> <br />
+      <label htmlFor="email">User Email to share data with </label> <br />
       <input
         type="email"
         name="email"
         value={email}
         onChange={e => setEmail(e.target.value)}
+       />
+      <br />
+      <label htmlFor="usergroup">User Group to share data with </label> <br />
+
+        <input
+        type="text"
+        name="usergroup"
+        value={usergroup}
+        onChange={e => setusergroup(e.target.value)}
        />
       <br />
       <button type="submit">Send it!</button>

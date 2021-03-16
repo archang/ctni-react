@@ -30,6 +30,7 @@ import makeData from '../makeData'
 import ctni_logo from '../ctni_logo.jpg';
 import AuthNav from "./auth-nav";
 import http from "../http-common";
+import async from "async";
 
 var sharedgrabbedarray=[];
  let h="hello"
@@ -811,13 +812,16 @@ const Studies = () =>{
       studygrabbedarray.push(studies[i])
       console.log("hi", studygrabbedarray);
     }
-    http.post("/download", studygrabbedarray, {
+    var unique = studygrabbedarray.filter((v, i, a) => a.indexOf(v) === i);
+    http.post("/download", unique, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         }
       });
 
   }
+
+
 
   function handleShareClick(event) {
   event.preventDefault();
@@ -870,20 +874,22 @@ console.log("mama")
 //
 
 
-  let study_name="Study_Name"
+  let study_name="Study_ID"
   let names=[]
     for (let i=0;i<sharedgrabbedarray.length;i++){
       names.push(sharedgrabbedarray[i][study_name])
     }
     console.log("hey you", names)
- http.post("/download", sharedgrabbedarray, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        }
-      });
+    var unique = names.filter((v, i, a) => a.indexOf(v) === i);
+    console.log(unique + " This is line 882");
+    console.log(sharedgrabbedarray + " This is line 883");
 
-window.location.assign(`http://localhost:3000/share?arr=${names}`);
-
+window.location. assign(`http://localhost:3000/share?arr=${names}`);
+ http.post("/download", unique, {
+     headers: {
+       "Content-Type": "application/json",
+     }
+   })
 
 }
 
@@ -1139,6 +1145,7 @@ window.location.assign(`http://localhost:3000/share?arr=${names}`);
             <DropdownItem className="option" onClick={handleDownloadClick}>Download</DropdownItem>
             {/*()=>alert(JSON.stringify(selectedRows, null ,2))*/}
             <DropdownItem className="option"onClick={handleShareClick}   >Share</DropdownItem>
+
             {/**/}
           </DropdownMenu>
         </ButtonDropdown>
