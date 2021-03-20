@@ -66,14 +66,12 @@
   "resolutions": {
     "styled-components": "^5"
   },
+  "proxy": "http://localhost:5000",
   "devDependencies": {
-<<<<<<< HEAD
     "amplifyjs": "^1.1.2-beta.2",
-    "nodemailer": "^6.5.0"
-=======
+    "nodemailer": "^6.5.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^4.4.0",
     "webpack-dev-server": "^3.11.0"
->>>>>>> master
   }
 }

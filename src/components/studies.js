@@ -1120,8 +1120,6 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
   )
 
   const data = studies
-  const testdata = jsontestdata
-  console.log(testdata)
   const [selectedRows, setSelectedRows] = React.useState({});
 
   const [dropdownOpen, setOpen] = useState(false);
