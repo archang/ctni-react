@@ -5,6 +5,8 @@ import styled from "styled-components";
 import {useDropzone} from 'react-dropzone';
 import axios from "axios"
 import http from "../http-common";
+import emailjs from 'emailjs-com';
+
 
 const baseStyle = {
   flex: 1,

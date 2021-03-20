@@ -55,7 +55,11 @@ const Home = () => (
       >
         CTNI
       </a>
+<<<<<<< HEAD
+      <a  href="/studies" className="login-button">Login</a>
+=======
       <Link to ="/studies" className="login-button">Login</Link>
+>>>>>>> master
     </p>
   </div></Styles>
 );
