@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 
-import {Home, Studies, Manage} from "./components";
+import {Home, Studies} from "./components";
 import ProtectedRoute from "./auth/protected-route";
 import UploadFiles from "./components/storage";
 import share from "./components/share";
@@ -16,7 +16,6 @@ const App = () => {
             <Switch>
             <Route path="/" exact component={Home} />
             <Route path='/studies' component={Studies} />
-            <Route path="/manage" component={Manage} />
             <Route path="/storage" component={UploadFiles} />
             <Route path="/share" component={share} />
           </Switch>

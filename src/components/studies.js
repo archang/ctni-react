@@ -24,9 +24,6 @@ import {
   useExpanded,
 } from 'react-table'
 import matchSorter from 'match-sorter'
-import jsondata from '../data.json'
-import jsontestdata from '../testdata.json'
-import makeData from '../makeData'
 import ctni_logo from '../ctni_logo.jpg';
 import AuthNav from "./auth-nav";
 import http from "../http-common";
@@ -956,173 +953,170 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
 
 
   const columns = React.useMemo(
-      () => [
-        {
-          Header: 'Studies',
-          columns: [
-            {
-              Header: 'IDs',
-              accessor: 'Study_ID',
-            },
-            {
-              Header: 'Owner',
-              accessor: 'Study_Owner',
-              aggregate: 'unique',
-            },
-            {
-              Header: 'Desc.',
-              accessor: 'Study_Description',
-              // Use our custom `fuzzyText` filter on this column
-              filter: 'fuzzyText',
-              aggregate: 'unique',
-              canGroupBy: false,
-            },
-            {
-              Header: 'Name.',
-              accessor: 'Study_Name',
-              // Use our custom `fuzzyText` filter on this column
-              filter: 'fuzzyText',
-              aggregate: 'unique',
-              canGroupBy: false,
-            },
-            {
-              Header: 'Rating',
-              accessor: 'Study_Rating',
-              Filter: SelectColumnFilter,
-              filter: 'includes',
-              aggregate: 'unique',
-              canGroupBy: false,
-            },
-            {
-              Header: 'Comments',
-              accessor: 'Study_Comments',
-              // Use our custom `fuzzyText` filter on this column
-              filter: 'fuzzyText',
-              aggregate: 'unique',
-              canGroupBy: false,
-            },
+    () => [
+      {
+        Header: 'Studies',
+        columns: [
+          {
+            Header: 'Name.',
+            accessor: 'Study_ID',
+            // Use our custom `fuzzyText` filter on this column
+            filter: 'fuzzyText',
+            aggregate: 'unique',
+            canGroupBy: true,
+          },
+          {
+            Header: 'Owner',
+            accessor: 'Study_Owner',
+            aggregate: 'unique',
+          },
 
-          ],
-        },
-        {
-          Header: ' ',
-          columns: [
+          {
+            Header: 'Desc.',
+            accessor: 'Study_Description',
+            // Use our custom `fuzzyText` filter on this column
+            filter: 'fuzzyText',
+            aggregate: 'unique',
+            canGroupBy: false,
+          },
+          {
+            Header: 'Rating',
+            accessor: 'Study_Rating',
+            Filter: SelectColumnFilter,
+            filter: 'equals',
+            aggregate: 'unique',
+            canGroupBy: false,
+          },
+          {
+            Header: 'Comments',
+            accessor: 'Study_Comments',
+            // Use our custom `fuzzyText` filter on this column
+            filter: 'fuzzyText',
+            aggregate: 'unique',
+            canGroupBy: false,
+          },
+
+        ],
+      },
+      {
+        Header: ' ',
+        columns: [
+          {
+            Header: 'ID',
+            accessor: 'Scan_ID',
+            Filter: SelectColumnFilter,
+            filter: 'equals',
+            canGroupBy: false,
+          },
+          {
+            Header: 'Name',
+            accessor: 'Scan_Name',
+            Filter: SelectColumnFilter,
+            filter: 'includes',
+            canGroupBy: false,
+          },
             {
-              Header: 'ID',
-              accessor: 'Scan_ID',
-              Filter: SliderColumnFilter,
-              filter: 'equals',
-              canGroupBy: false,
-            },
+            Header: 'Time',
+            accessor: 'Scan_Time',
+            // Use our custom `fuzzyText` filter on this column
+            filter: 'fuzzyText',
+            canGroupBy: false,
+          },
             {
-              Header: 'Name',
-              accessor: 'Scan_Name',
-              Filter: SelectColumnFilter,
-              filter: 'includes',
-              canGroupBy: false,
-            },
+            Header: 'FOV',
+            accessor: 'FOV',
+            // Use our custom `fuzzyText` filter on this column
+            filter: 'fuzzyText',
+            canGroupBy: false,
+          },
             {
-              Header: 'Time',
-              accessor: 'Scan_Time',
-              // Use our custom `fuzzyText` filter on this column
-              filter: 'fuzzyText',
-              canGroupBy: false,
-            },
+            Header: 'Echotime',
+            accessor: 'Echotime',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            // Aggregate the sum of all visits
+            aggregate: 'average',
+            Aggregated: ({ value }) => `${parseFloat(value).toFixed(2)} (avg)`,
+            canGroupBy: false,
+          },
             {
-              Header: 'FOV',
-              accessor: 'FOV',
-              // Use our custom `fuzzyText` filter on this column
-              filter: 'fuzzyText',
-              canGroupBy: false,
-            },
+            Header: 'Rep. Time',
+            accessor: 'Repetitiontime',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            // Aggregate the sum of all visits
+            aggregate: 'average',
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
+            canGroupBy: false,
+          },
             {
-              Header: 'Echotime',
-              accessor: 'Echotime',
-              Filter: NumberRangeColumnFilter,
-              filter: 'between',
-              // Aggregate the sum of all visits
-              aggregate: 'average',
-              Aggregated: ({value}) => `${parseFloat(value).toFixed(2)} (avg)`,
-              canGroupBy: false,
-            },
+            Header: '# Rep.',
+            accessor: 'Nrepetition',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            // Aggregate the sum of all visits
+            aggregate: 'average',
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
+            canGroupBy: false,
+          },
             {
-              Header: 'Rep. Time',
-              accessor: 'Repetitiontime',
-              Filter: NumberRangeColumnFilter,
-              filter: 'between',
-              // Aggregate the sum of all visits
-              aggregate: 'average',
-              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
-              canGroupBy: false,
-            },
+            Header: 'Spat. Res.',
+            accessor: 'SpatResol',
+            // Use our custom `fuzzyText` filter on this column
+            filter: 'fuzzyText',
+            canGroupBy: false,
+          },
             {
-              Header: '# Rep.',
-              accessor: 'Nrepetition',
-              Filter: NumberRangeColumnFilter,
-              filter: 'between',
-              // Aggregate the sum of all visits
-              aggregate: 'average',
-              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
-              canGroupBy: false,
-            },
+            Header: 'Thickness',
+            accessor: 'SliceThick',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            // Aggregate the sum of all visits
+            aggregate: 'average',
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
+            canGroupBy: false,
+          },
             {
-              Header: 'Spat. Res.',
-              accessor: 'SpatResol',
-              // Use our custom `fuzzyText` filter on this column
-              filter: 'fuzzyText',
-              canGroupBy: false,
-            },
+            Header: '# Slice',
+            accessor: 'NSlice',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            // Aggregate the sum of all visits
+            aggregate: 'average',
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
+            canGroupBy: false,
+          },
             {
-              Header: 'Thickness',
-              accessor: 'SliceThick',
-              Filter: NumberRangeColumnFilter,
-              filter: 'between',
-              // Aggregate the sum of all visits
-              aggregate: 'average',
-              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
-              canGroupBy: false,
-            },
+            Header: 'Slice Gap',
+            accessor: 'SliceGap',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            // Aggregate the sum of all visits
+            aggregate: 'average',
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
+            canGroupBy: false,
+          },
             {
-              Header: '# Slice',
-              accessor: 'NSlice',
-              Filter: NumberRangeColumnFilter,
-              filter: 'between',
-              // Aggregate the sum of all visits
-              aggregate: 'average',
-              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
-              canGroupBy: false,
-            },
-            {
-              Header: 'Slice Gap',
-              accessor: 'SliceGap',
-              Filter: NumberRangeColumnFilter,
-              filter: 'between',
-              // Aggregate the sum of all visits
-              aggregate: 'average',
-              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
-              canGroupBy: false,
-            },
-            {
-              Header: 'Slice Dist.',
-              accessor: 'SliceDistance',
-              Filter: NumberRangeColumnFilter,
-              filter: 'between',
-              // Aggregate the sum of all visits
-              aggregate: 'average',
-              Aggregated: ({value}) => `${value.toFixed(2)} (avg)`,
-              canGroupBy: false,
-            },
-            {
-              Header: 'Orientation',
-              accessor: 'SliceOrient',
-              Filter: SelectColumnFilter,
-              filter: 'includes',
-              canGroupBy: false,
-            }
-          ],
-        },
-      ],
-      []
+            Header: 'Slice Dist.',
+            accessor: 'SliceDistance',
+            Filter: NumberRangeColumnFilter,
+            filter: 'between',
+            // Aggregate the sum of all visits
+            aggregate: 'average',
+            Aggregated: ({ value }) => `${value.toFixed(2)} (avg)`,
+            canGroupBy: false,
+          },
+          {
+            Header: 'Orientation',
+            accessor: 'SliceOrient',
+            Filter: SelectColumnFilter,
+            filter: 'equals',
+            canGroupBy: false,
+          }
+        ],
+      },
+    ],
+    []
   )
 
   const data = studies

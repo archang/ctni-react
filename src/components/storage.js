@@ -5,7 +5,8 @@ import styled from "styled-components";
 import {useDropzone} from 'react-dropzone';
 import axios from "axios"
 import http from "../http-common";
-import emailjs from 'emailjs-com';
+import {withAuthenticationRequired} from "@auth0/auth0-react";
+import Loading from "./loading";
 
 
 const baseStyle = {
@@ -15,6 +16,7 @@ const baseStyle = {
   alignItems: "center",
   padding: "20px",
   borderWidth: 2,
+
   borderRadius: 20,
   borderColor: "#26C2E7",
   borderStyle: "dashed",
@@ -23,19 +25,15 @@ const baseStyle = {
   outline: "none",
   transition: "border .24s ease-in-out"
 };
-
 const activeStyle = {
   borderColor: '#2196f3'
 };
-
 const acceptStyle = {
   borderColor: '#00e676'
 };
-
 const rejectStyle = {
   borderColor: '#ff1744'
 };
-
 const Styles = styled.div`
   .back-button {
     padding: 10px 15px;
@@ -73,7 +71,7 @@ const {
     isDragAccept,
     isDragReject,
     acceptedFiles
-  } = useDropzone({accept: 'image/*'});
+  } = useDropzone();
 
   const style = useMemo(() => ({
     ...baseStyle,
@@ -91,11 +89,15 @@ const {
         let formData = new FormData();
         let file = acceptedFiles[i];
         formData.append('file', file);
-        console.log(formData)
+        // formData.set('name',formData.get('file').path)
+        // formData.set('file'[''],)
+        // console.log(formData.get('file'))
         http.post("/upload", formData, {
           headers: {
           "Content-Type": "multipart/form-data",
-      }
+      }})
+    .catch(function (error) {
+      console.log(error);
     });
     }
   }
@@ -120,10 +122,10 @@ const {
     </section>
   );
 }
-
 <Basic />
 
-export default class UploadFiles extends Component {
+
+class UploadFiles extends Component {
   constructor(props) {
     super(props);
     this.selectFiles = this.selectFiles.bind(this);
@@ -202,35 +204,6 @@ export default class UploadFiles extends Component {
       <div>
         <Basic />
         <a href="http://localhost:3000/studies" className="back-button">Back to Studies</a>
-        {progressInfos &&
-          progressInfos.map((progressInfo, index) => (
-            <div className="mb-2" key={index}>
-              <span>{progressInfo.fileName}</span>
-              <div className="progress">
-                <div
-                  className="progress-bar progress-bar-info"
-                  role="progressbar"
-                  aria-valuenow={progressInfo.percentage}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  style={{ width: progressInfo.percentage + "%" }}
-                >
-                  {progressInfo.percentage}%
-                </div>
-              </div>
-            </div>
-          ))}
-
-
-        {message.length > 0 && (
-          <div className="alert alert-secondary" role="alert">
-            <ul>
-              {message.map((item, i) => {
-                return <li key={i}>{item}</li>;
-              })}
-            </ul>
-          </div>
-        )}
 
         <div className="card">
           <div className="card-header">Wait till you see the "Upload successful" before navigating away!</div>
@@ -247,3 +220,7 @@ export default class UploadFiles extends Component {
     );
   }
 }
+
+export default withAuthenticationRequired(UploadFiles, {
+  onRedirecting: () => <Loading />,
+});
