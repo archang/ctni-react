@@ -757,9 +757,11 @@ const Studies = () =>{
   // <div className="fixed-header">
 
   const [studies, setStudies] = useState([]);
-
+  const {user} = useAuth0();
+  const userEmail = user.email
+  const auth0id = user.sub
   useEffect(() => {
-    fetch("/studies").then(response =>
+    fetch("/studies/" + userEmail + "/" + auth0id).then(response =>
         response.json().then(data => {
           setStudies(data);
         })
