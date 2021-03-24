@@ -55,13 +55,10 @@ const Home = () => (
       >
         CTNI
       </a>
-<<<<<<< HEAD
-      <a  href="/studies" className="login-button">Login</a>
-=======
-      <Link to ="/studies" className="login-button">Login</Link>
->>>>>>> master
+      <a href="/studies" className="login-button">Login</a>
     </p>
-  </div></Styles>
+  </div>
+  </Styles>
 );
 
 export default Home;
