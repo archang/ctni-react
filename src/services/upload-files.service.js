@@ -17,6 +17,10 @@ class UploadFilesService {
   getFiles() {
     return http.get("/files");
   }
+
+  getGroups() {
+    return http.get("/groups");
+  }
 }
 
 export default new UploadFilesService();

@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React, {Component, useEffect, useState} from "react";
 import {useMemo} from 'react';
 import UploadService from "../services/upload-files.service";
 import styled from "styled-components";
 import {useDropzone} from 'react-dropzone';
 import axios from "axios"
 import http from "../http-common";
-import {withAuthenticationRequired} from "@auth0/auth0-react";
+import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+
 import Loading from "./loading";
 
 
@@ -55,7 +56,6 @@ const Styles = styled.div`
     .back-button:hover {
     background-color: #155cb3;
   }
-
   .back-button:active {
     background-color: #155cb3;
     box-shadow: 0 5px #666;
@@ -88,14 +88,18 @@ const {
     for (var i = 0; i < acceptedFiles.length; i++) {
         let formData = new FormData();
         let file = acceptedFiles[i];
+        console.log(file.path)
         formData.append('file', file);
         // formData.set('name',formData.get('file').path)
         // formData.set('file'[''],)
         // console.log(formData.get('file'))
-        http.post("/upload", formData, {
-          headers: {
+        http.post("/upload",
+            formData, {
+        headers: {
           "Content-Type": "multipart/form-data",
-      }})
+          "Custom-Header": file.path,
+        }}
+    )
     .catch(function (error) {
       console.log(error);
     });
@@ -125,20 +129,25 @@ const {
 <Basic />
 
 
+
 class UploadFiles extends Component {
+
   constructor(props) {
     super(props);
     this.selectFiles = this.selectFiles.bind(this);
     this.upload = this.upload.bind(this);
     this.uploadFiles = this.uploadFiles.bind(this);
 
+
+
     this.state = {
       selectedFiles: undefined,
       progressInfos: [],
       message: [],
-
       fileInfos: [],
     };
+
+
   }
   componentDidMount() {
     UploadService.getFiles().then((response) => {
@@ -163,7 +172,7 @@ class UploadFiles extends Component {
         _progressInfos,
       });
     })
-      .then((response) => {
+      .then(() => {
         this.setState((prev) => {
           let nextMessage = [...prev.message, "Uploaded the file successfully: " + file.name];
           return {
@@ -194,10 +203,9 @@ class UploadFiles extends Component {
       }
     );
   }
-
   render() {
     const { selectedFiles, progressInfos, message, fileInfos } = this.state;
-    console.log(fileInfos)
+
 
     return (
         <Styles>
