@@ -29,6 +29,7 @@ import AuthNav from "./auth-nav";
 import http from "../http-common";
 import async from "async";
 
+
 var sharedgrabbedarray=[];
  let h="hello"
 // import { useSticky } from 'react-table-sticky';
@@ -805,15 +806,40 @@ const Studies = () =>{
     console.log(selectedRows)
     let studygrabbedarray = [];
     for (let i in selectedRows) {
-      console.log("id", i)
+      // console.log("id", i)
       studygrabbedarray.push(studies[i])
       console.log("hi", studygrabbedarray);
     }
     var unique = studygrabbedarray.filter((v, i, a) => a.indexOf(v) === i);
+
+    // var scan_names = []
+
+    // for (let scans in unique){
+    //   console.log(unique[scans]['Scan_Name'])
+    //   scan_names.push(unique[scans]['Scan_Name'])
+
+    // }
+    // console.log(scan_names)
+
+    // const params = {
+    //   Bucket: 'ctni-bucket',
+    //   Key: 'functional_RARE'
+    // };
+
+    // S3.getObject(params, (err, data) => {
+    //   if (err) console.log(err);
+    //   console.log(data.Body.toString())
+    // })
+    
+
     http.post("/download", unique, {
         headers: {
           "Content-Type": "application/json",
         }
+      }).then(res => {
+        console.log(res['data'])
+      }).catch(err => {
+        console.log(err)
       });
 
   }
@@ -1134,7 +1160,8 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
             Manage
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem className="option" onClick={handleDownloadClick}>Download</DropdownItem>
+            <DropdownItem 
+            className="option" onClick={handleDownloadClick}>Download</DropdownItem>
             {/*()=>alert(JSON.stringify(selectedRows, null ,2))*/}
             <DropdownItem className="option"onClick={handleShareClick}   >Share</DropdownItem>
 
