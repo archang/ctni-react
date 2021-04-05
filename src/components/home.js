@@ -1,6 +1,8 @@
 import React from "react";
 import head_logo from '../head_logo.PNG';
+import AuthNav from "./auth-nav";
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 const Styles = styled.div`
   .landing-page {
@@ -38,6 +40,7 @@ const Styles = styled.div`
 }
 `
 
+
 const Home = () => (
     <Styles>
   <div className="landing-page">
@@ -54,7 +57,8 @@ const Home = () => (
       </a>
       <a href="/studies" className="login-button">Login</a>
     </p>
-  </div></Styles> 
+  </div>
+  </Styles>
 );
 
 export default Home;
