@@ -963,23 +963,25 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
         columns: [
           {
             Header: 'Name.',
-            accessor: 'Study_ID',
+            accessor: 'Study_Name',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
             aggregate: 'unique',
             canGroupBy: true,
           },
           {
-            Header: 'Owner',
+            Header: '',
             accessor: 'Study_Owner',
             aggregate: 'unique',
+            disableFilters: true,
+            canGroupBy: false,
           },
 
           {
             Header: 'Desc.',
             accessor: 'Study_Description',
             // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
+
             aggregate: 'unique',
             canGroupBy: false,
           },

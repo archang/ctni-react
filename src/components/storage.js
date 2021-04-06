@@ -98,6 +98,7 @@ const {
         headers: {
           "Content-Type": "multipart/form-data",
           "Custom-Header": file.path,
+          "Study-Owner": 'Praveen'
         }}
     )
     .catch(function (error) {
