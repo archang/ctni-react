@@ -34,14 +34,9 @@ function FeedbackForm() {
             })
         );
     }, []);
-    var groupsgrabbed = groups,
-        MakeItem = function (X) {
-            return <option>{X}</option>;
-        };
+    var groupsgrabbed = groups
     // Array format of groups grabbed from backednd Api
     //ToDO: Please make dropdown for user group entries
-
-
     console.log("grps", groupsgrabbed)
 
     console.log("nnn", grr)
@@ -51,62 +46,63 @@ function FeedbackForm() {
         console.log("usergroup", usergroup)
         var groupdata = []
         var all_emails = email.split(",");
+        console.log("all",all_emails);
         for (let e in all_emails) {
-            groupdata.push(e)
+            groupdata.push(all_emails[e])
+            console.log("GD", groupdata);
+            var emailactual=all_emails[e]
             fetch(`https://hooks.zapier.com/hooks/catch/9665392/ongbdjr/`, {
                 method: 'POST',
-                body: JSON.stringify({e, comment, grr}),
+                body: JSON.stringify({emailactual, comment, grr}),
             })
         }
 
-        var all_groups = usergroup.split(",");
+      var all_groups = usergroup.split(",");
         for (let u in all_groups) {
-            groupdata.push(u)
+            groupdata.push(all_groups[u])
         }
         http.post("/email", groupdata, {
             headers: {
                 "Content-Type": "application/json",
             }
-        }).then(r => function (status) {
-            alert("\nStatus: " + r);
+        }).then(r => {if (r.status==200){
+            console.log(r)
+            alert("Success! Data shared with "+groupdata)}
         });
 
-    }
-
-    return (
-        <form onSubmit={submit}>
-            <label htmlFor="comment">Your question or comment</label>
-            <textarea
-                name="comment"
-                value={comment}
-                onChange={e => setComment(e.target.value)}
-            />
-            <br/>
-            <label htmlFor="email">User Email to share data with </label> <br/>
-            <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-            />
-            <br/>
-            <label htmlFor="usergroup">User Group to share data with </label> <br/>
-
-            {/*<input*/}
-            {/*    type="text"*/}
-            {/*    */}
-            {/*/>*/}
-            <select name="usergroup"
-                    value={usergroup}
-                    onChange={e => setusergroup(e.target.value)}>{groupsgrabbed.map(MakeItem)}</select>;
-
-            <br/>
-            <button type="submit">Send it!</button>
-        </form>
-
-    )
 }
 
+return (
+    <form onSubmit={submit}>
+        <label htmlFor="comment">Your question or comment</label>
+        <textarea
+            name="comment"
+            value={comment}
+            onChange={e => setComment(e.target.value)}
+        />
+        <br/>
+        <label htmlFor="email">User Email to share data with </label> <br/>
+        <input
+            type="text"
+            name="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+        />
+        <br/>
+        <label htmlFor="usergroup">User Group to share data with </label> <br/>
+
+        <input
+            type="text"
+            name="usergroup"
+            value={usergroup}
+            onChange={e => setusergroup(e.target.value)}
+        />
+        <br/>
+        <button type="submit">Send it!</button>
+    </form>
+
+)
+}
 export default class share extends Component {
 
     render() {

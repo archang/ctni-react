@@ -24,7 +24,7 @@ import {
   useExpanded,
 } from 'react-table'
 import matchSorter from 'match-sorter'
-import ctni_logo from '../ctni_logo.jpg';
+// import ctni_logo from '.../ctni_logo.jpg';
 import AuthNav from "./auth-nav";
 import http from "../http-common";
 import async from "async";
@@ -650,7 +650,7 @@ function Table({ columns, data, skipReset, setSelectedRows }) {
       </table>
       </div>
       <a href="https://web.northeastern.edu/ctni/">
-      <img className="ctni-logo-class" src={ctni_logo} alt="Logo" />;
+      {/*<img className="ctni-logo-class" src={ctni_logo} alt="Logo" />;*/}
       </a>
       {/*<div className="login-button">*/}
       <AuthNav />
