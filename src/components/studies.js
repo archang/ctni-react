@@ -1026,7 +1026,7 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
             Header: 'Desc.',
             accessor: 'Study_Description',
             // Use our custom `fuzzyText` filter on this column
-            filter: 'fuzzyText',
+
             aggregate: 'unique',
             canGroupBy: false,
           },
