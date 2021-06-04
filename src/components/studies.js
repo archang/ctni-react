@@ -5,6 +5,8 @@ import  Loading from './loading'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { saveAs } from 'file-saver';
 import styled from 'styled-components'
+import Popup from "reactjs-popup";
+import DownloadPopup from "./DownloadPopup";
 
 import {
   BrowserRouter as Router,
@@ -41,6 +43,42 @@ var sharedgrabbedarray=[];
 const Styles = styled.div`
   padding: 1rem;
   flex: 1;
+  
+  .modal {
+  font-size: 22px;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  margin: auto;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  text-align: center;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
    
   .ctni-logo-class {
     position: absolute;
@@ -813,8 +851,15 @@ const Studies = () =>{
       studygrabbedarray.push(studies[i])
       console.log("hi", studygrabbedarray);
     }
-    var unique = studygrabbedarray.filter((v, i, a) => a.indexOf(v) === i);
-    http.post("/download", unique, {
+
+    let study_names = []
+    for(var i=0; i< studygrabbedarray.length; i++) {
+      study_names.push(studygrabbedarray[i].Study_Name);
+    }
+    var uniqueArray = [...new Set(study_names)]
+
+    console.log(uniqueArray)
+    http.post("/download", uniqueArray, {
         headers: {
           "Content-Type": "application/json",
         }
@@ -925,18 +970,18 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
 
 
 
-  /// download each file from s3 and put it in the zip folder
-  // async function DownloadFileFromS3(fileToDownload) {
-  //
-  //   const result = await Storage.get(fileToDownload.key, {download: true})
-  //
-  //   let mimeType = result.ContentType
-  //   let fileName = fileToDownload.key
-  //   let blob = new Blob([result.Body], {type: mimeType})
-  //
-  //   photoZip.file(fileName[1], blob)
-  //
-  // }
+  // download each file from s3 and put it in the zip folder
+  async function DownloadFileFromS3(fileToDownload) {
+
+    const result = await Storage.get(fileToDownload.key, {download: true})
+
+    let mimeType = result.ContentType
+    let fileName = fileToDownload.key
+    let blob = new Blob([result.Body], {type: mimeType})
+
+    photoZip.file(fileName[1], blob)
+
+  }
 
   // return(
   //
@@ -963,16 +1008,18 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
         columns: [
           {
             Header: 'Name.',
-            accessor: 'Study_ID',
+            accessor: 'Study_Name',
             // Use our custom `fuzzyText` filter on this column
             filter: 'fuzzyText',
             aggregate: 'unique',
             canGroupBy: true,
           },
           {
-            Header: 'Owner',
+            Header: '',
             accessor: 'Study_Owner',
             aggregate: 'unique',
+            disableFilters: true,
+            canGroupBy: false,
           },
 
           {
@@ -1016,7 +1063,7 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
             Header: 'Name',
             accessor: 'Scan_Name',
             Filter: SelectColumnFilter,
-            filter: 'includes',
+            filter: 'equals',
             canGroupBy: false,
           },
             {
@@ -1133,6 +1180,9 @@ window.location. assign(`http://localhost:3000/share?arr=${names}`);
 
   return (
       <Styles>
+        <Popup modal trigger={<button className="action">Downloadddddddddd</button>}>
+          {close => <DownloadPopup close={close} />}
+        </Popup>
         <ButtonDropdown className="action" isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle caret className="action">
             Manage
